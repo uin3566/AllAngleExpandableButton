@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="fangxu.com.allangleexpandablebutton">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <category android:name="ANDROID.INTENT.CATEGORY.LAUNCHER" />
+                <action android:name="ANDROID.INTENT.ACTION.MAIN" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
