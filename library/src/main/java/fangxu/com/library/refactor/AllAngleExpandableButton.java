@@ -2,9 +2,7 @@ package fangxu.com.library.refactor;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -25,7 +23,7 @@ public class AllAngleExpandableButton extends View {
 
     private float startAngle;
     private float endAngle;
-    private int buttonColor = 0xffffffff;
+    private int buttonColor = 0xffff0000;
 
     private RectF buttonOval;
     private PointF buttonCenter;
@@ -110,12 +108,12 @@ public class AllAngleExpandableButton extends View {
         return this;
     }
 
-    public AllAngleExpandableButton setDrawableResId(int resId) {
+    public AllAngleExpandableButton setButtonDrawableResId(int resId) {
         Drawable drawable = getContext().getResources().getDrawable(resId);
-        return setDrawable(drawable);
+        return setButtonDrawable(drawable);
     }
 
-    public AllAngleExpandableButton setDrawable(Drawable drawable) {
+    public AllAngleExpandableButton setButtonDrawable(Drawable drawable) {
         if (buttonDrawables == null) {
             buttonDrawables = new ArrayList<>();
         }

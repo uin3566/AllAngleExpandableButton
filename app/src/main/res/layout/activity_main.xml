@@ -9,11 +9,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true">
 
-        <fangxu.com.library.AllAngleExpandableButton
+        <fangxu.com.library.refactor.AllAngleExpandableButton
             android:id="@+id/button_expandable"
-            android:background="#ff0000"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
 
     </RelativeLayout>
 

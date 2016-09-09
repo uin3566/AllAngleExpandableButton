@@ -7,7 +7,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import fangxu.com.library.AllAngleExpandableButton;
+import fangxu.com.library.refactor.AllAngleExpandableButton;
 import fangxu.com.library.ButtonBean;
 import fangxu.com.library.ButtonClickListener;
 
@@ -20,31 +20,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        createAllAngleExpandableButton();
+        createButton();
     }
 
-    private void createAllAngleExpandableButton() {
-        AllAngleExpandableButton expandableButton = (AllAngleExpandableButton)findViewById(R.id.button_expandable);
-        ButtonBean beanMain = new ButtonBean("送到", 0);
-        ButtonBean bean1 = new ButtonBean("99", 1);
-        ButtonBean bean2 = new ButtonBean("520", 2);
-        ButtonBean bean3 = new ButtonBean("1314", 3);
-        List<ButtonBean> beanList = new ArrayList<>(4);
-        beanList.add(beanMain);
-        beanList.add(bean1);
-        beanList.add(bean2);
-        beanList.add(bean3);
-        expandableButton.setItems(beanList);
-        expandableButton.setClickListener(new ButtonClickListener() {
-            @Override
-            public void onMainButtonClick() {
-
-            }
-
-            @Override
-            public void onSubButtonClick(int position) {
-                Toast.makeText(MainActivity.this.getApplicationContext(), "click position:" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void createButton() {
+        AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable);
+        button.setButtonDrawableResId(R.drawable.black_num_0).setButtonDrawableResId(R.drawable.black_num_1).setButtonDrawableResId(R.drawable.black_num_2);
+        button.invalidate();
     }
 }
