@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/darker_gray">
 
     <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
         android:id="@+id/button_expandable"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:aebStartAngleDegree="180"
-        app:aebEndAngleDegree="90"
-        app:aebMainSizeDp="70dp"
-        app:aebSubSizeDp="60dp"
+        android:layout_centerInParent="true"
         app:aebAnimDurationMillis="250"
-        app:aebMaskBackgroundColor="#66ff0022"
-        app:aebButtonGapDp="60dp"/>
+        app:aebButtonGapDp="60dp"
+        app:aebEndAngleDegree="0"
+        app:aebIsSelectionMode="false"
+        app:aebMainSizeDp="70dp"
+        app:aebStartAngleDegree="270"
+        app:aebSubSizeDp="60dp" />
 
 </RelativeLayout>

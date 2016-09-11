@@ -26,8 +26,8 @@ public class MainActivity extends Activity {
     private void createButton() {
         AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable);
         List<ButtonData> buttonDatas = new ArrayList<>();
-        String[] str = {"ab", "cd", "ef", "gh"};
-        for (int i = 0; i < 4; i++) {
+        String[] str = {"A", "B", "C", "D", "E", "F", "G", "H"};
+        for (int i = 0; i < 8; i++) {
             ButtonData buttonData = new ButtonData(false);
             buttonData.setText(str[i]).setPaddingDp(2).setTextSizeSp(20);
             buttonDatas.add(buttonData);

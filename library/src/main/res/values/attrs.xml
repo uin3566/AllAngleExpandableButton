@@ -9,6 +9,7 @@
         <attr name="aebEndAngleDegree" format="integer|reference"/>
         <attr name="aebAnimDurationMillis" format="integer|reference"/>
         <attr name="aebMaskBackgroundColor" format="color|reference"/>
+        <attr name="aebIsSelectionMode" format="boolean"/>
     </declare-styleable>
 
 </resources>

@@ -6,18 +6,14 @@ package com.fangxu.allangleexpandablebutton;
 public class AngleCalculator {
 
     private double startAngle;
-    private double endAngle;
-    private int count;
     private double averageAngle;
 
     public AngleCalculator(float startAngle, float endAngle, int expandButtonCount) {
         this.startAngle = Math.toRadians(startAngle);
-        this.endAngle = Math.toRadians(endAngle);
-        this.count = expandButtonCount;
-        if (this.count <= 1) {
-            throw new IllegalArgumentException("expandButtonCount can not smaller than one");
+        endAngle = (float)Math.toRadians(endAngle);
+        if (expandButtonCount > 1) {
+            this.averageAngle = (endAngle - this.startAngle) / (expandButtonCount - 1);
         }
-        this.averageAngle = (this.endAngle - this.startAngle) / (count - 1);
     }
 
     public int getDesX(int radius, int index) {

@@ -50,7 +50,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private int buttonSubSizePx;
     private int animDuration;
     private int maskBackgroundColor;
-    private ExpandMode expandMode = ExpandMode.MODE_SELECTION;
+    private boolean isSelectionMode;
 
     private RectF buttonOval;
     private PointF buttonCenter;
@@ -94,6 +94,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         buttonSubSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebSubSizeDp, DEFAULT_BUTTON_SUB_SIZE_DP);
         animDuration = ta.getInteger(R.styleable.AllAngleExpandableButton_aebAnimDurationMillis, DEFAULT_EXPAND_ANIMATE_DURATION);
         maskBackgroundColor = ta.getInteger(R.styleable.AllAngleExpandableButton_aebMaskBackgroundColor, DEFAULT_MASK_BACKGROUND_COLOR);
+        isSelectionMode = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebIsSelectionMode, true);
         ta.recycle();
     }
 
@@ -102,11 +103,11 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     }
 
     public AllAngleExpandableButton setButtonDatas(List<ButtonData> buttonDatas) {
-        if (buttonDatas == null) {
+        if (buttonDatas == null || buttonDatas.isEmpty()) {
             return this;
         }
         this.buttonDatas = new ArrayList<>(buttonDatas);
-        if (expandMode == ExpandMode.MODE_SELECTION) {
+        if (isSelectionMode) {
             try {
                 this.buttonDatas.add(0, (ButtonData) buttonDatas.get(0).clone());
             } catch (CloneNotSupportedException e) {
@@ -162,7 +163,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                return !animating;
+                return !animating && buttonDatas != null && !buttonDatas.isEmpty();
             case MotionEvent.ACTION_UP:
                 if (expanded) {
                     collapse();
@@ -394,7 +395,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             if (allAngleExpandableButton.buttonClickListener != null) {
                 allAngleExpandableButton.buttonClickListener.onButtonClicked(index);
             }
-            if (allAngleExpandableButton.expandMode == ExpandMode.MODE_SELECTION) {
+            if (allAngleExpandableButton.isSelectionMode) {
                 if (index > 0) {
                     ButtonData buttonData = allAngleExpandableButton.buttonDatas.get(index);
                     ButtonData mainButton = allAngleExpandableButton.buttonDatas.get(0);
