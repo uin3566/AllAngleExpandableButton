@@ -1,4 +1,4 @@
-package fangxu.com.library.refactor;
+package com.fangxu.allangleexpandablebutton;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;

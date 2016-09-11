@@ -5,7 +5,7 @@
     android:background="@android:color/darker_gray">
 
 
-    <fangxu.com.library.refactor.AllAngleExpandableButton
+    <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
         android:id="@+id/button_expandable"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"

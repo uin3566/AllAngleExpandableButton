@@ -8,7 +8,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.fangxu.sample.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <category android:name="ANDROID.INTENT.CATEGORY.LAUNCHER" />

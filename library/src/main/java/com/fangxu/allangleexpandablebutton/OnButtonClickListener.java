@@ -1,4 +1,4 @@
-package fangxu.com.library.refactor;
+package com.fangxu.allangleexpandablebutton;
 
 /**
  * Created by dear33 on 2016/9/11.

@@ -1,13 +1,15 @@
-package fangxu.com.allangleexpandablebutton;
+package com.fangxu.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
+import com.fangxu.allangleexpandablebutton.ButtonData;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import fangxu.com.library.refactor.AllAngleExpandableButton;
-import fangxu.com.library.refactor.ButtonData;
+import fangxu.com.allangleexpandablebutton.R;
 
 /**
  * Created by dear33 on 2016/8/20.

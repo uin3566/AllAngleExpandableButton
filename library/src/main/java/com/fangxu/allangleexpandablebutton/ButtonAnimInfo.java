@@ -1,7 +1,6 @@
-package fangxu.com.library.refactor;
+package com.fangxu.allangleexpandablebutton;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 /**
