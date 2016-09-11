@@ -12,8 +12,8 @@ public class ButtonAnimInfo {
     private float rotate;
     private RectF rectF;
 
-    public void set(Context context, ButtonData buttonData) {
-        int sizePx = DimenUtil.dp2px(context, buttonData.getButtonSizeDp());
+    public void set(ButtonData buttonData) {
+        int sizePx = buttonData.getButtonSizePx();
         rectF = new RectF(0, 0, sizePx, sizePx);
         scale = 1;
         alpha = 1;

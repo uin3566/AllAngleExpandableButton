@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="style_button">
-        <item name="android:layout_width">@dimen/button_size</item>
-        <item name="android:layout_height">@dimen/button_size</item>
-        <item name="android:background">@drawable/shape_button</item>
-        <item name="android:layout_margin">@dimen/button_margin</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:textSize">@dimen/button_text_size</item>
-        <item name="android:gravity">center</item>
-    </style>
-
-    <style name="style_image_button">
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_width">@dimen/button_size</item>
-        <item name="android:layout_height">@dimen/button_size</item>
-        <item name="android:background">@drawable/shape_button</item>
-        <item name="android:layout_margin">@dimen/button_margin</item>
-    </style>
-
+    <declare-styleable name="AllAngleExpandableButton">
+        <attr name="aebMainSizeDp" format="dimension|reference"/>
+        <attr name="aebSubSizeDp" format="dimension|reference"/>
+        <attr name="aebButtonGapDp" format="dimension|reference"/>
+        <attr name="aebStartAngleDegree" format="integer|reference"/>
+        <attr name="aebEndAngleDegree" format="integer|reference"/>
+        <attr name="aebAnimDurationMillis" format="integer|reference"/>
+        <attr name="aebMaskBackgroundColor" format="color|reference"/>
+    </declare-styleable>
 
 </resources>

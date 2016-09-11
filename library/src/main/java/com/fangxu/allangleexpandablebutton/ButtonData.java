@@ -6,23 +6,37 @@ import android.graphics.drawable.Drawable;
 /**
  * Created by dear33 on 2016/9/9.
  */
-public class ButtonData {
+public class ButtonData implements Cloneable{
     private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
     private static final int DEFAULT_TEXT_COLOR = Color.BLACK;
-    private static final int DEFAULT_BUTTON_SIZE_DP = 55;
     private static final int DEFAULT_TEXT_SIZE_SP = 20;
 
     private String text;
     private Drawable icon;
     private boolean iconData;
-    private float padding;
+    private float paddingDp;
+    private int buttonSizePx;
     private int textSizeSp = DEFAULT_TEXT_SIZE_SP;
-    private int buttonSizeDp = DEFAULT_BUTTON_SIZE_DP;
     private int textColor = DEFAULT_TEXT_COLOR;
     private int backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ButtonData buttonData = (ButtonData)super.clone();
+        buttonData.setIsIconData(this.iconData).setButtonSizePx(this.buttonSizePx)
+                .setBackgroundColor(this.backgroundColor)
+                .setIcon(this.icon).setPaddingDp(this.paddingDp).setText(this.text)
+                .setTextColor(this.textColor).setTextSizeSp(this.textSizeSp);
+        return buttonData;
+    }
+
     public ButtonData(boolean iconData) {
         this.iconData = iconData;
+    }
+
+    public ButtonData setIsIconData(boolean isIconData) {
+        iconData = isIconData;
+        return this;
     }
 
     public String getText() {
@@ -47,13 +61,13 @@ public class ButtonData {
         return iconData;
     }
 
-    public ButtonData setButtonSizeDp(int buttonSizeDp) {
-        this.buttonSizeDp = buttonSizeDp;
+    public ButtonData setButtonSizePx(int buttonSizePx) {
+        this.buttonSizePx = buttonSizePx;
         return this;
     }
 
-    public int getButtonSizeDp() {
-        return buttonSizeDp;
+    public int getButtonSizePx() {
+        return buttonSizePx;
     }
 
     public int getTextSizeSp() {
@@ -65,12 +79,12 @@ public class ButtonData {
         return this;
     }
 
-    public float getPadding() {
-        return padding;
+    public float getPaddingDp() {
+        return paddingDp;
     }
 
-    public ButtonData setPadding(float padding) {
-        this.padding = padding;
+    public ButtonData setPaddingDp(float padding) {
+        this.paddingDp = padding;
         return this;
     }
 

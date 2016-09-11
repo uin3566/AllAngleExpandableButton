@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Button
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/style_button"
-    tools:ignore="RequiredSize" />
