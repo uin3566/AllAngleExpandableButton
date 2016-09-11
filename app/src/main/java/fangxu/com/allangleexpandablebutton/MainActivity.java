@@ -27,7 +27,12 @@ public class MainActivity extends Activity {
         String[] str = {"ab", "cd", "ef", "gh"};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData = new ButtonData(false);
-            buttonData.setText(str[i]).setPadding(2).setTextSizeSp(20).setButtonSizeDp(60);
+            buttonData.setText(str[i]).setPadding(2).setTextSizeSp(20);
+            if (i == 0) {
+                buttonData.setButtonSizeDp(60);
+            } else {
+                buttonData.setButtonSizeDp(50);
+            }
             buttonDatas.add(buttonData);
         }
         button.setStartAngle(0).setEndAngle(90).setButtonDatas(buttonDatas);

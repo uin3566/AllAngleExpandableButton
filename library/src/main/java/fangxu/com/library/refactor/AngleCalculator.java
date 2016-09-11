@@ -22,14 +22,12 @@ public class AngleCalculator {
 
     public int getDesX(int radius, int index) {
         double angle =  getCurrentAngle(index);
-        int x = (int)(Math.cos(angle) * radius);
-        return x;
+        return (int)(Math.cos(angle) * radius);
     }
 
     public int getDesY(int radius, int index) {
         double angle = getCurrentAngle(index);
-        int y = (int)(Math.sin(angle) * radius);
-        return y;
+        return (int)(Math.sin(angle) * radius);
     }
 
     private double getCurrentAngle(int index) {
