@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
  */
 public class ButtonData implements Cloneable{
     private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-    private static final int DEFAULT_TEXT_COLOR = Color.BLACK;
+    private static final int DEFAULT_TEXT_COLOR = Color.BLUE;
     private static final int DEFAULT_TEXT_SIZE_SP = 20;
 
     private String text;

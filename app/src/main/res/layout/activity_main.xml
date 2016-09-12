@@ -10,9 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         app:aebAnimDurationMillis="250"
+        app:aebMainSizeDp="60dp"
+        app:aebSubSizeDp="60dp"
         app:aebButtonGapDp="60dp"
         app:aebEndAngleDegree="0"
         app:aebIsSelectionMode="false"
-        app:aebStartAngleDegree="270"/>
+        app:aebStartAngleDegree="180"/>
 
 </RelativeLayout>
