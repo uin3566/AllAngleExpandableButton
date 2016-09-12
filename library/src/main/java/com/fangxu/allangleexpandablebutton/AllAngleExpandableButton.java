@@ -5,12 +5,16 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -33,10 +37,14 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     private OnButtonClickListener buttonClickListener;
 
+    private static final int BUTTON_SHADOW_COLOR = 0xff000000;
+    private static final int BUTTON_SHADOW_ALPHA = 32;
+
     private static final int DEFAULT_EXPAND_ANIMATE_DURATION = 225;
     private static final int DEFAULT_BUTTON_GAP_DP = 50;
     private static final int DEFAULT_BUTTON_MAIN_SIZE_DP = 60;
     private static final int DEFAULT_BUTTON_SUB_SIZE_DP = 60;
+    private static final int DEFAULT_BUTTON_ELEVATION_DP = 4;
     private static final int DEFAULT_START_ANGLE = 90;
     private static final int DEFAULT_END_ANGLE = 180;
     private static final int DEFAULT_MASK_BACKGROUND_COLOR = 0x00000000;
@@ -50,7 +58,11 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private int buttonSubSizePx;
     private int animDuration;
     private int maskBackgroundColor;
+    private int buttonElevationPx;
     private boolean isSelectionMode;
+
+    private Bitmap mainShadowBitmap = null;
+    private Bitmap subShadowBitmap = null;
 
     private RectF buttonOval;
     private PointF buttonCenter;
@@ -89,9 +101,12 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AllAngleExpandableButton);
         startAngle = ta.getInteger(R.styleable.AllAngleExpandableButton_aebStartAngleDegree, DEFAULT_START_ANGLE);
         endAngle = ta.getInteger(R.styleable.AllAngleExpandableButton_aebEndAngleDegree, DEFAULT_END_ANGLE);
-        buttonGapPx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonGapDp, DEFAULT_BUTTON_GAP_DP);
-        buttonMainSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebMainSizeDp, DEFAULT_BUTTON_MAIN_SIZE_DP);
-        buttonSubSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebSubSizeDp, DEFAULT_BUTTON_SUB_SIZE_DP);
+
+        buttonGapPx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonGapDp, DimenUtil.dp2px(context, DEFAULT_BUTTON_GAP_DP));
+        buttonMainSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebMainSizeDp, DimenUtil.dp2px(context, DEFAULT_BUTTON_MAIN_SIZE_DP));
+        buttonSubSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebSubSizeDp, DimenUtil.dp2px(context, DEFAULT_BUTTON_SUB_SIZE_DP));
+        buttonElevationPx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonElevation, DimenUtil.dp2px(context, DEFAULT_BUTTON_ELEVATION_DP));
+
         animDuration = ta.getInteger(R.styleable.AllAngleExpandableButton_aebAnimDurationMillis, DEFAULT_EXPAND_ANIMATE_DURATION);
         maskBackgroundColor = ta.getInteger(R.styleable.AllAngleExpandableButton_aebMaskBackgroundColor, DEFAULT_MASK_BACKGROUND_COLOR);
         isSelectionMode = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebIsSelectionMode, true);
@@ -118,9 +133,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         for (int i = 0, size = this.buttonDatas.size(); i < size; i++) {
             ButtonData buttonData = this.buttonDatas.get(i);
             if (i == 0) {
-                buttonData.setButtonSizePx(buttonMainSizePx);
+                buttonData.setIsMainButton(true).setButtonSizePx(buttonMainSizePx);
             } else {
-                buttonData.setButtonSizePx(buttonSubSizePx);
+                buttonData.setIsMainButton(false).setButtonSizePx(buttonSubSizePx);
             }
             ButtonAnimInfo info = new ButtonAnimInfo();
             info.set(buttonData);
@@ -302,6 +317,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     }
 
     private void drawButton(Canvas canvas, Paint paint, ButtonData buttonData) {
+        drawShadow(canvas, buttonData);
         paint.setColor(buttonData.getBackgroundColor());
         RectF rectF = animInfoMap.get(buttonData).getRectF();
         canvas.drawOval(rectF, paint);
@@ -323,6 +339,59 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             String text = buttonData.getText();
             textPaint = getTextPaint(buttonData.getTextSizeSp(), buttonData.getTextColor());
             canvas.drawText(text, rectF.centerX(), rectF.centerY() - (textPaint.ascent() + textPaint.descent()) / 2, textPaint);
+        }
+    }
+
+    private void drawShadow(Canvas canvas, ButtonData buttonData) {
+        if (buttonElevationPx <= 0) {
+            return;
+        }
+
+        float left, top;
+        ButtonAnimInfo buttonAnimInfo = animInfoMap.get(buttonData);
+        Bitmap bitmap;
+        if (buttonData.isMainButton()) {
+            mainShadowBitmap = getButtonShadowBitmap(buttonData);
+            bitmap = mainShadowBitmap;
+        } else {
+            subShadowBitmap = getButtonShadowBitmap(buttonData);
+            bitmap = subShadowBitmap;
+        }
+        left = buttonAnimInfo.getRectF().centerX() - bitmap.getWidth() / 2;
+        top = buttonAnimInfo.getRectF().centerY() - bitmap.getHeight() / 2 + buttonElevationPx / 2;
+        canvas.drawBitmap(bitmap, left, top, paint);
+    }
+
+    private Bitmap getButtonShadowBitmap(ButtonData buttonData) {
+        if (buttonData.isMainButton()) {
+            if (mainShadowBitmap != null) {
+                return mainShadowBitmap;
+            }
+        } else {
+            if (subShadowBitmap != null) {
+                return subShadowBitmap;
+            }
+        }
+
+        int buttonRadius = buttonData.getButtonSizePx() / 2;
+        int bitmapRadius = buttonRadius + buttonElevationPx;
+        int bitmapSize = bitmapRadius * 2;
+        Bitmap bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888);
+        bitmap.eraseColor(0x0);
+        int colors[] = {ColorUtils.setAlphaComponent(BUTTON_SHADOW_COLOR, BUTTON_SHADOW_ALPHA),
+                        ColorUtils.setAlphaComponent(BUTTON_SHADOW_COLOR, 0)};
+        float stops[] = {(float) (buttonRadius - buttonElevationPx) / (float) bitmapSize, 1};
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(new RadialGradient(bitmapRadius, bitmapRadius, bitmapRadius, colors, stops, Shader.TileMode.CLAMP));
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawRect(0, 0, bitmapSize, bitmapSize, paint);
+        if (buttonData.isMainButton()) {
+            mainShadowBitmap = bitmap;
+            return mainShadowBitmap;
+        } else {
+            subShadowBitmap = bitmap;
+            return subShadowBitmap;
         }
     }
 

@@ -16,6 +16,7 @@ public class ButtonData implements Cloneable{
     private boolean iconData;
     private float paddingDp;
     private int buttonSizePx;
+    private boolean isMainButton = false;
     private int textSizeSp = DEFAULT_TEXT_SIZE_SP;
     private int textColor = DEFAULT_TEXT_COLOR;
     private int backgroundColor = DEFAULT_BACKGROUND_COLOR;
@@ -24,7 +25,7 @@ public class ButtonData implements Cloneable{
     protected Object clone() throws CloneNotSupportedException {
         ButtonData buttonData = (ButtonData)super.clone();
         buttonData.setIsIconData(this.iconData).setButtonSizePx(this.buttonSizePx)
-                .setBackgroundColor(this.backgroundColor)
+                .setBackgroundColor(this.backgroundColor).setIsMainButton(this.isMainButton)
                 .setIcon(this.icon).setPaddingDp(this.paddingDp).setText(this.text)
                 .setTextColor(this.textColor).setTextSizeSp(this.textSizeSp);
         return buttonData;
@@ -32,6 +33,15 @@ public class ButtonData implements Cloneable{
 
     public ButtonData(boolean iconData) {
         this.iconData = iconData;
+    }
+
+    public ButtonData setIsMainButton(boolean isMainButton) {
+        this.isMainButton = isMainButton;
+        return this;
+    }
+
+    public boolean isMainButton() {
+        return isMainButton;
     }
 
     public ButtonData setIsIconData(boolean isIconData) {

@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/darker_gray">
+    android:layout_height="match_parent">
 
     <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
         android:id="@+id/button_expandable"
@@ -14,8 +13,6 @@
         app:aebButtonGapDp="60dp"
         app:aebEndAngleDegree="0"
         app:aebIsSelectionMode="false"
-        app:aebMainSizeDp="70dp"
-        app:aebStartAngleDegree="270"
-        app:aebSubSizeDp="60dp" />
+        app:aebStartAngleDegree="270"/>
 
 </RelativeLayout>

@@ -8,6 +8,7 @@
         <attr name="aebStartAngleDegree" format="integer|reference"/>
         <attr name="aebEndAngleDegree" format="integer|reference"/>
         <attr name="aebAnimDurationMillis" format="integer|reference"/>
+        <attr name="aebButtonElevation" format="dimension|reference"/>
         <attr name="aebMaskBackgroundColor" format="color|reference"/>
         <attr name="aebIsSelectionMode" format="boolean"/>
     </declare-styleable>
