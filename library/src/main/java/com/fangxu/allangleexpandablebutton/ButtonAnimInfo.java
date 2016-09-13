@@ -12,9 +12,9 @@ public class ButtonAnimInfo {
     private float rotate;
     private RectF rectF;
 
-    public void set(ButtonData buttonData, int buttonElevation) {
+    public void set(ButtonData buttonData, int buttonSideMargin) {
         int sizePx = buttonData.getButtonSizePx();
-        rectF = new RectF(buttonElevation, buttonElevation, sizePx + buttonElevation, sizePx + buttonElevation);
+        rectF = new RectF(buttonSideMargin, buttonSideMargin, sizePx + buttonSideMargin, sizePx + buttonSideMargin);
         scale = 1;
         alpha = 1;
         rotate = 0;

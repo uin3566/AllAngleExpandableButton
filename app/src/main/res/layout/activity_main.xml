@@ -13,8 +13,8 @@
         app:aebMainSizeDp="60dp"
         app:aebSubSizeDp="60dp"
         app:aebButtonGapDp="60dp"
-        app:aebEndAngleDegree="0"
+        app:aebEndAngleDegree="90"
         app:aebIsSelectionMode="false"
-        app:aebStartAngleDegree="180"/>
+        app:aebStartAngleDegree="0"/>
 
 </RelativeLayout>
