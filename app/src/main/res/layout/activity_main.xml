@@ -8,13 +8,16 @@
         android:id="@+id/button_expandable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="200dp"
         app:aebAnimDurationMillis="250"
-        app:aebMainSizeDp="60dp"
-        app:aebSubSizeDp="60dp"
-        app:aebButtonGapDp="60dp"
+        app:aebMainSizeDp="56dp"
+        app:aebSubSizeDp="56dp"
+        app:aebButtonGapDp="65dp"
+        app:aebButtonElevation="2dp"
+        app:aebStartAngleDegree="180"
         app:aebEndAngleDegree="90"
-        app:aebIsSelectionMode="false"
-        app:aebStartAngleDegree="0"/>
+        app:aebIsSelectionMode="true"/>
 
 </RelativeLayout>

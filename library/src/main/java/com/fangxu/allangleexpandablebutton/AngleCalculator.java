@@ -5,28 +5,40 @@ package com.fangxu.allangleexpandablebutton;
  */
 public class AngleCalculator {
 
-    private double startAngle;
-    private double averageAngle;
+    private double startAngleRadians;
+    private double averageAngleRadians;
 
-    public AngleCalculator(float startAngle, float endAngle, int expandButtonCount) {
-        this.startAngle = Math.toRadians(startAngle);
-        endAngle = (float)Math.toRadians(endAngle);
+    public AngleCalculator(float startAngleDegree, float endAngleDegree, int expandButtonCount) {
+        this.startAngleRadians = Math.toRadians(startAngleDegree);
+        double endAngleRadians = Math.toRadians(endAngleDegree);
         if (expandButtonCount > 1) {
-            this.averageAngle = (endAngle - this.startAngle) / (expandButtonCount - 1);
+            this.averageAngleRadians = (endAngleRadians - this.startAngleRadians) / (expandButtonCount - 1);
         }
     }
 
     public int getDesX(int radius, int index) {
         double angle =  getCurrentAngle(index);
-        return (int)(Math.cos(angle) * radius);
+        int desX;
+        if (averageAngleRadians == 0) {
+            desX = (int)(Math.cos(angle) * radius) * index;
+        } else {
+            desX = (int)(Math.cos(angle) * radius);
+        }
+        return desX;
     }
 
     public int getDesY(int radius, int index) {
         double angle = getCurrentAngle(index);
-        return (int)(Math.sin(angle) * radius);
+        int desY;
+        if (averageAngleRadians == 0) {
+            desY = (int)(Math.sin(angle) * radius) * index;
+        } else {
+            desY = (int)(Math.sin(angle) * radius);
+        }
+        return desY;
     }
 
     private double getCurrentAngle(int index) {
-        return startAngle + averageAngle * (index - 1);
+        return startAngleRadians + averageAngleRadians * (index - 1);
     }
 }
