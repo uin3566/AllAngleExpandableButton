@@ -11,6 +11,10 @@
         <attr name="aebButtonElevation" format="dimension|reference"/>
         <attr name="aebMaskBackgroundColor" format="color|reference"/>
         <attr name="aebIsSelectionMode" format="boolean"/>
+        <attr name="aebButtonMainTextColor" format="color|reference"/>
+        <attr name="aebButtonSubTextColor" format="color|reference"/>
+        <attr name="aebButtonMainTextSizeSp" format="dimension|reference"/>
+        <attr name="aebButtonSubTextSizeSp" format="dimension|reference"/>
     </declare-styleable>
 
 </resources>

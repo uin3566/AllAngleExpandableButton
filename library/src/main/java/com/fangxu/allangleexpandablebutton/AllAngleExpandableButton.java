@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -39,15 +40,17 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private OnButtonClickListener buttonClickListener;
 
     private static final int BUTTON_SHADOW_COLOR = 0xff000000;
-    private static final int BUTTON_SHADOW_ALPHA = 32;
+    private static final int BUTTON_SHADOW_ALPHA = 24;
 
     private static final int DEFAULT_EXPAND_ANIMATE_DURATION = 225;
     private static final int DEFAULT_BUTTON_GAP_DP = 50;
     private static final int DEFAULT_BUTTON_MAIN_SIZE_DP = 60;
     private static final int DEFAULT_BUTTON_SUB_SIZE_DP = 60;
     private static final int DEFAULT_BUTTON_ELEVATION_DP = 4;
+    private static final int DEFAULT_BUTTON_TEXT_SIZE_SP = 20;
     private static final int DEFAULT_START_ANGLE = 90;
     private static final int DEFAULT_END_ANGLE = 180;
+    private static final int DEFAULT_BUTTON_TEXT_COLOR = Color.BLACK;
     private static final int DEFAULT_MASK_BACKGROUND_COLOR = 0x00000000;
 
     private boolean expanded = false;
@@ -57,7 +60,11 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private int buttonGapPx;
     private int buttonMainSizePx;
     private int buttonSubSizePx;
+    private int buttonMainTextSize;
+    private int buttonSubTextSize;
     private int animDuration;
+    private int buttonMainTextColor;
+    private int buttonSubTextColor;
     private int maskBackgroundColor;
     private int buttonElevationPx;
     private boolean isSelectionMode;
@@ -68,8 +75,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     private int buttonSideMarginPx;
     private RectF buttonOval;
-    private PointF buttonCenter;
-    private int buttonRadius;
     private int width;
     private int height;
 
@@ -110,6 +115,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         buttonSubSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebSubSizeDp, DimenUtil.dp2px(context, DEFAULT_BUTTON_SUB_SIZE_DP));
         buttonElevationPx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonElevation, DimenUtil.dp2px(context, DEFAULT_BUTTON_ELEVATION_DP));
         buttonSideMarginPx = buttonElevationPx * 2;
+        buttonMainTextSize = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonMainTextSizeSp, DimenUtil.sp2px(context, DEFAULT_BUTTON_TEXT_SIZE_SP));
+        buttonSubTextSize = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonSubTextSizeSp, DimenUtil.sp2px(context, DEFAULT_BUTTON_TEXT_SIZE_SP));
+        buttonMainTextColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebButtonMainTextColor, DEFAULT_BUTTON_TEXT_COLOR);
+        buttonSubTextColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebButtonSubTextColor, DEFAULT_BUTTON_TEXT_COLOR);
 
         animDuration = ta.getInteger(R.styleable.AllAngleExpandableButton_aebAnimDurationMillis, DEFAULT_EXPAND_ANIMATE_DURATION);
         maskBackgroundColor = ta.getInteger(R.styleable.AllAngleExpandableButton_aebMaskBackgroundColor, DEFAULT_MASK_BACKGROUND_COLOR);
@@ -137,9 +146,11 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         for (int i = 0, size = this.buttonDatas.size(); i < size; i++) {
             ButtonData buttonData = this.buttonDatas.get(i);
             if (i == 0) {
-                buttonData.setIsMainButton(true).setButtonSizePx(buttonMainSizePx);
+                buttonData.setIsMainButton(true).setButtonSizePx(buttonMainSizePx)
+                        .setTextSizePx(buttonMainTextSize).setTextColor(buttonMainTextColor);
             } else {
-                buttonData.setIsMainButton(false).setButtonSizePx(buttonSubSizePx);
+                buttonData.setIsMainButton(false).setButtonSizePx(buttonSubSizePx)
+                        .setTextSizePx(buttonSubTextSize).setTextColor(buttonSubTextColor);
             }
             ButtonAnimInfo info = new ButtonAnimInfo();
             info.set(buttonData, buttonSideMarginPx);
@@ -327,10 +338,11 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         RectF rectF = animInfoMap.get(buttonData).getRectF();
         canvas.drawOval(rectF, paint);
         if (buttonData.isIconData()) {
-            if (buttonData.getIcon() == null) {
-                throw new IllegalArgumentException("iconData is true, icon drawable cannot be null");
+            int iconRes = buttonData.getIconResId();
+            Drawable drawable = getContext().getResources().getDrawable(iconRes);
+            if (drawable == null) {
+                throw new RuntimeException("can not get Drawable by iconRes id");
             }
-            Drawable drawable = buttonData.getIcon();
             int left = (int) rectF.left + DimenUtil.dp2px(getContext(), buttonData.getPaddingDp());
             int right = (int) rectF.right - DimenUtil.dp2px(getContext(), buttonData.getPaddingDp());
             int top = (int) rectF.top + DimenUtil.dp2px(getContext(), buttonData.getPaddingDp());
@@ -342,7 +354,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
                 throw new IllegalArgumentException("iconData is false, text cannot be null");
             }
             String text = buttonData.getText();
-            textPaint = getTextPaint(buttonData.getTextSizeSp(), buttonData.getTextColor());
+            textPaint = getTextPaint(buttonData.getTextSizePx(), buttonData.getTextColor());
             canvas.drawText(text, rectF.centerX(), rectF.centerY() - (textPaint.ascent() + textPaint.descent()) / 2, textPaint);
         }
     }
@@ -392,7 +404,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         bitmap.eraseColor(0x0);
         int colors[] = {ColorUtils.setAlphaComponent(BUTTON_SHADOW_COLOR, BUTTON_SHADOW_ALPHA),
                 ColorUtils.setAlphaComponent(BUTTON_SHADOW_COLOR, 0)};
-        float stops[] = {(float) (buttonRadius - buttonElevationPx) / (float) buttonRadius, 1};
+        float stops[] = {(float) (buttonRadius - buttonElevationPx) / (float) bitmapRadius, 1};
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setShader(new RadialGradient(bitmapRadius, bitmapRadius, bitmapRadius, colors, stops, Shader.TileMode.CLAMP));
@@ -407,14 +419,14 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
     }
 
-    private Paint getTextPaint(int sizeSp, int color) {
+    private Paint getTextPaint(int sizePx, int color) {
         if (textPaint == null) {
             textPaint = new Paint();
             textPaint.setAntiAlias(true);
             textPaint.setTextAlign(Paint.Align.CENTER);
         }
 
-        textPaint.setTextSize(DimenUtil.sp2px(getContext(), sizeSp));
+        textPaint.setTextSize(sizePx);
         textPaint.setColor(color);
         return textPaint;
     }
@@ -422,8 +434,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private void initButtonInfo() {
         float innerWidth = width - (getPaddingLeft() + getPaddingRight() + buttonSideMarginPx * 2);
         float innerHeight = height - (getPaddingTop() + getPaddingBottom() + buttonSideMarginPx * 2);
-        buttonRadius = (int) (Math.min(innerWidth / 2, innerHeight / 2));
-        buttonCenter = new PointF(getPaddingLeft() + width / 2, getPaddingTop() + height / 2);
+        float buttonRadius = Math.min(innerWidth / 2, innerHeight / 2);
+        PointF buttonCenter = new PointF(getPaddingLeft() + width / 2, getPaddingTop() + height / 2);
         buttonOval = new RectF(buttonCenter.x - buttonRadius, buttonCenter.y - buttonRadius
                 , buttonCenter.x + buttonRadius, buttonCenter.y + buttonRadius);
     }
@@ -482,7 +494,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
                     ButtonData mainButton = allAngleExpandableButton.buttonDatas.get(0);
                     if (buttonData.isIconData()) {
                         mainButton.setIsIconData(true);
-                        mainButton.setIcon(buttonData.getIcon());
+                        mainButton.setIconResId(buttonData.getIconResId());
                     } else {
                         mainButton.setIsIconData(false);
                         mainButton.setText(buttonData.getText());

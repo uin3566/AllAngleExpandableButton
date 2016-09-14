@@ -1,24 +1,21 @@
 package com.fangxu.allangleexpandablebutton;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 
 /**
  * Created by dear33 on 2016/9/9.
  */
 public class ButtonData implements Cloneable{
     private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-    private static final int DEFAULT_TEXT_COLOR = Color.BLUE;
-    private static final int DEFAULT_TEXT_SIZE_SP = 20;
 
-    private String text;
-    private Drawable icon;
+    private boolean isMainButton = false;
     private boolean iconData;
+    private String text;
+    private int iconResId;
     private float paddingDp;
     private int buttonSizePx;
-    private boolean isMainButton = false;
-    private int textSizeSp = DEFAULT_TEXT_SIZE_SP;
-    private int textColor = DEFAULT_TEXT_COLOR;
+    private int textSizePx;
+    private int textColor;
     private int backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
     @Override
@@ -26,8 +23,8 @@ public class ButtonData implements Cloneable{
         ButtonData buttonData = (ButtonData)super.clone();
         buttonData.setIsIconData(this.iconData).setButtonSizePx(this.buttonSizePx)
                 .setBackgroundColor(this.backgroundColor).setIsMainButton(this.isMainButton)
-                .setIcon(this.icon).setPaddingDp(this.paddingDp).setText(this.text)
-                .setTextColor(this.textColor).setTextSizeSp(this.textSizeSp);
+                .setIconResId(this.iconResId).setPaddingDp(this.paddingDp).setText(this.text)
+                .setTextColor(this.textColor).setTextSizePx(this.textSizePx);
         return buttonData;
     }
 
@@ -58,12 +55,12 @@ public class ButtonData implements Cloneable{
         return this;
     }
 
-    public Drawable getIcon() {
-        return icon;
+    public int getIconResId() {
+        return iconResId;
     }
 
-    public ButtonData setIcon(Drawable icon) {
-        this.icon = icon;
+    public ButtonData setIconResId(int iconResId) {
+        this.iconResId = iconResId;
         return this;
     }
 
@@ -80,12 +77,12 @@ public class ButtonData implements Cloneable{
         return buttonSizePx;
     }
 
-    public int getTextSizeSp() {
-        return textSizeSp;
+    public int getTextSizePx() {
+        return textSizePx;
     }
 
-    public ButtonData setTextSizeSp(int textSizeSp) {
-        this.textSizeSp = textSizeSp;
+    public ButtonData setTextSizePx(int textSizeSp) {
+        this.textSizePx = textSizeSp;
         return this;
     }
 
