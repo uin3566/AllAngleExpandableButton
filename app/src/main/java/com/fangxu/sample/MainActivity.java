@@ -29,9 +29,10 @@ public class MainActivity extends Activity {
         AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable);
         List<ButtonData> buttonDatas = new ArrayList<>();
         final String[] str = {"A", "B", "C", "D"};
+        int[] colors = {0xffffffff, 0xffff0000, 0xff00ff00, 0xff0000ff};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData = new ButtonData(false);
-            buttonData.setText(str[i]);
+            buttonData.setText(str[i]).setBackgroundColor(colors[i]);
             buttonDatas.add(buttonData);
         }
         button.setButtonDatas(buttonDatas);

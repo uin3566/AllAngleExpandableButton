@@ -116,13 +116,13 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         startAngle = ta.getInteger(R.styleable.AllAngleExpandableButton_aebStartAngleDegree, DEFAULT_START_ANGLE);
         endAngle = ta.getInteger(R.styleable.AllAngleExpandableButton_aebEndAngleDegree, DEFAULT_END_ANGLE);
 
-        buttonGapPx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonGapDp, DimenUtil.dp2px(context, DEFAULT_BUTTON_GAP_DP));
-        buttonMainSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebMainSizeDp, DimenUtil.dp2px(context, DEFAULT_BUTTON_MAIN_SIZE_DP));
-        buttonSubSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebSubSizeDp, DimenUtil.dp2px(context, DEFAULT_BUTTON_SUB_SIZE_DP));
-        buttonElevationPx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonElevation, DimenUtil.dp2px(context, DEFAULT_BUTTON_ELEVATION_DP));
+        buttonGapPx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonGapDp, dp2px(context, DEFAULT_BUTTON_GAP_DP));
+        buttonMainSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebMainSizeDp, dp2px(context, DEFAULT_BUTTON_MAIN_SIZE_DP));
+        buttonSubSizePx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebSubSizeDp, dp2px(context, DEFAULT_BUTTON_SUB_SIZE_DP));
+        buttonElevationPx = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonElevation, dp2px(context, DEFAULT_BUTTON_ELEVATION_DP));
         buttonSideMarginPx = buttonElevationPx * 2;
-        buttonMainTextSize = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonMainTextSizeSp, DimenUtil.sp2px(context, DEFAULT_BUTTON_TEXT_SIZE_SP));
-        buttonSubTextSize = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonSubTextSizeSp, DimenUtil.sp2px(context, DEFAULT_BUTTON_TEXT_SIZE_SP));
+        buttonMainTextSize = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonMainTextSizeSp, sp2px(context, DEFAULT_BUTTON_TEXT_SIZE_SP));
+        buttonSubTextSize = ta.getDimensionPixelSize(R.styleable.AllAngleExpandableButton_aebButtonSubTextSizeSp, sp2px(context, DEFAULT_BUTTON_TEXT_SIZE_SP));
         buttonMainTextColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebButtonMainTextColor, DEFAULT_BUTTON_TEXT_COLOR);
         buttonSubTextColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebButtonSubTextColor, DEFAULT_BUTTON_TEXT_COLOR);
 
@@ -401,10 +401,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             if (drawable == null) {
                 throw new RuntimeException("can not get Drawable by iconRes id");
             }
-            int left = (int) rectF.left + DimenUtil.dp2px(getContext(), buttonData.getPaddingDp());
-            int right = (int) rectF.right - DimenUtil.dp2px(getContext(), buttonData.getPaddingDp());
-            int top = (int) rectF.top + DimenUtil.dp2px(getContext(), buttonData.getPaddingDp());
-            int bottom = (int) rectF.bottom - DimenUtil.dp2px(getContext(), buttonData.getPaddingDp());
+            int left = (int) rectF.left + dp2px(getContext(), buttonData.getPaddingDp());
+            int right = (int) rectF.right - dp2px(getContext(), buttonData.getPaddingDp());
+            int top = (int) rectF.top + dp2px(getContext(), buttonData.getPaddingDp());
+            int bottom = (int) rectF.bottom - dp2px(getContext(), buttonData.getPaddingDp());
             drawable.setBounds(left, top, right, bottom);
             drawable.draw(canvas);
         } else {
@@ -490,6 +490,17 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         buttonOval = new RectF(buttonCenter.x - buttonRadius, buttonCenter.y - buttonRadius
                 , buttonCenter.x + buttonRadius, buttonCenter.y + buttonRadius);
     }
+
+    public int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    public int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
 
     private static class RippleInfo {
         float pressX;
