@@ -15,9 +15,12 @@
         app:aebMainSizeDp="56dp"
         app:aebSubSizeDp="56dp"
         app:aebButtonGapDp="65dp"
-        app:aebButtonElevation="2dp"
-        app:aebStartAngleDegree="180"
-        app:aebEndAngleDegree="90"
-        app:aebIsSelectionMode="true"/>
+        app:aebButtonElevation="4dp"
+        app:aebButtonMainTextColor="#ffff5656"
+        app:aebButtonSubTextColor="#ffff5656"
+        app:aebStartAngleDegree="90"
+        app:aebEndAngleDegree="180"
+        app:aebIsSelectionMode="false"
+        app:aebRippleEffect="true"/>
 
 </RelativeLayout>

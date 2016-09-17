@@ -2,19 +2,21 @@
 <resources>
 
     <declare-styleable name="AllAngleExpandableButton">
-        <attr name="aebMainSizeDp" format="dimension|reference"/>
-        <attr name="aebSubSizeDp" format="dimension|reference"/>
-        <attr name="aebButtonGapDp" format="dimension|reference"/>
-        <attr name="aebStartAngleDegree" format="integer|reference"/>
-        <attr name="aebEndAngleDegree" format="integer|reference"/>
-        <attr name="aebAnimDurationMillis" format="integer|reference"/>
-        <attr name="aebButtonElevation" format="dimension|reference"/>
-        <attr name="aebMaskBackgroundColor" format="color|reference"/>
-        <attr name="aebIsSelectionMode" format="boolean"/>
-        <attr name="aebButtonMainTextColor" format="color|reference"/>
-        <attr name="aebButtonSubTextColor" format="color|reference"/>
-        <attr name="aebButtonMainTextSizeSp" format="dimension|reference"/>
-        <attr name="aebButtonSubTextSizeSp" format="dimension|reference"/>
+        <attr name="aebMainSizeDp" format="dimension|reference" />
+        <attr name="aebSubSizeDp" format="dimension|reference" />
+        <attr name="aebButtonGapDp" format="dimension|reference" />
+        <attr name="aebStartAngleDegree" format="integer|reference" />
+        <attr name="aebEndAngleDegree" format="integer|reference" />
+        <attr name="aebAnimDurationMillis" format="integer|reference" />
+        <attr name="aebButtonElevation" format="dimension|reference" />
+        <attr name="aebMaskBackgroundColor" format="color|reference" />
+        <attr name="aebIsSelectionMode" format="boolean" />
+        <attr name="aebButtonMainTextColor" format="color|reference" />
+        <attr name="aebButtonSubTextColor" format="color|reference" />
+        <attr name="aebButtonMainTextSizeSp" format="dimension|reference" />
+        <attr name="aebButtonSubTextSizeSp" format="dimension|reference" />
+        <attr name="aebRippleEffect" format="boolean" />
+        <attr name="aebRippleColor" format="color|reference"/>
     </declare-styleable>
 
 </resources>

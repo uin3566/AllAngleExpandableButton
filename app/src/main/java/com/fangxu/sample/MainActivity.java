@@ -2,9 +2,11 @@ package com.fangxu.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
+import com.fangxu.allangleexpandablebutton.OnButtonClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +28,22 @@ public class MainActivity extends Activity {
     private void createButton() {
         AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable);
         List<ButtonData> buttonDatas = new ArrayList<>();
-        String[] str = {"A", "B", "C", "D"};
+        final String[] str = {"A", "B", "C", "D"};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData = new ButtonData(false);
-            buttonData.setText(str[i]).setPaddingDp(2).setTextSizeSp(20).setBackgroundColor(0xffFFFFFF);
+            buttonData.setText(str[i]);
             buttonDatas.add(buttonData);
         }
         button.setButtonDatas(buttonDatas);
+        button.setButtonClickListener(new OnButtonClickListener() {
+            @Override
+            public void onButtonClicked(int index) {
+                if (index == -1) {
+                    Toast.makeText(MainActivity.this, "space", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, str[index], Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
