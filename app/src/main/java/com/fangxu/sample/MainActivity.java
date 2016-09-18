@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
         int[] colors = {0xffffffff, 0xffff0000, 0xff00ff00, 0xff0000ff};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData = new ButtonData(false);
-            buttonData.setText(str[i]).setBackgroundColor(colors[i]);
+            buttonData.setText(str[i]);
             buttonDatas.add(buttonData);
         }
         button.setButtonDatas(buttonDatas);
