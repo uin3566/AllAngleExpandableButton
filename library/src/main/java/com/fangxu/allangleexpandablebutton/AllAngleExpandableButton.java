@@ -41,7 +41,7 @@ import fangxu.com.library.R;
 public class AllAngleExpandableButton extends View implements ValueAnimator.AnimatorUpdateListener {
     private List<ButtonData> buttonDatas;
     private Map<ButtonData, RectF> buttonRects;
-    private OnButtonClickListener buttonClickListener;
+    private ButtonEventListener buttonEventListener;
 
     private static final int BUTTON_SHADOW_COLOR = 0xff000000;
     private static final int BUTTON_SHADOW_ALPHA = 24;
@@ -203,8 +203,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         rotateValueAnimator.addUpdateListener(this);
     }
 
-    public void setButtonClickListener(OnButtonClickListener listener) {
-        buttonClickListener = listener;
+    public void setButtonEventListener(ButtonEventListener listener) {
+        buttonEventListener = listener;
     }
 
     public AllAngleExpandableButton setButtonDatas(List<ButtonData> buttonDatas) {
@@ -299,6 +299,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
         expandValueAnimator.start();
         startRotateAnimator(true);
+        if (buttonEventListener != null) {
+            buttonEventListener.onExpand();
+        }
     }
 
     private void collapse() {
@@ -307,6 +310,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
         collapseValueAnimator.start();
         startRotateAnimator(false);
+        if (buttonEventListener != null) {
+            buttonEventListener.onCollapse();
+        }
     }
 
     private void startRotateAnimator(boolean expand) {
@@ -639,9 +645,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
 
         private void onButtonPressed() {
-            if (allAngleExpandableButton.buttonClickListener != null) {
+            if (allAngleExpandableButton.buttonEventListener != null) {
                 if (clickIndex > 0) {
-                    allAngleExpandableButton.buttonClickListener.onButtonClicked(clickIndex);
+                    allAngleExpandableButton.buttonEventListener.onButtonClicked(clickIndex);
                 }
             }
             if (allAngleExpandableButton.isSelectionMode) {

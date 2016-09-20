@@ -1,7 +1,5 @@
 package com.fangxu.allangleexpandablebutton;
 
-import android.graphics.Color;
-
 /**
  * Created by dear33 on 2016/9/9.
  */

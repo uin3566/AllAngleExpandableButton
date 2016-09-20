@@ -11,7 +11,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
-        app:aebAnimDurationMillis="250"
+        app:aebAnimDurationMillis="175"
         app:aebMainButtonSizeDp="56dp"
         app:aebSubButtonSizeDp="56dp"
         app:aebButtonGapDp="25dp"
@@ -22,6 +22,6 @@
         app:aebEndAngleDegree="90"
         app:aebIsSelectionMode="false"
         app:aebRippleEffect="true"
-        app:aebMainButtonRotateDegree="45"/>
+        app:aebMainButtonRotateDegree="135"/>
 
 </RelativeLayout>

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
-import com.fangxu.allangleexpandablebutton.OnButtonClickListener;
+import com.fangxu.allangleexpandablebutton.ButtonEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
 
     private void createButton() {
         AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable);
-        List<ButtonData> buttonDatas = new ArrayList<>();
+        final List<ButtonData> buttonDatas = new ArrayList<>();
         final String[] str = {"A", "B", "C", "D"};
         int[] drawable = {R.drawable.plus, R.drawable.mark, R.drawable.settings, R.drawable.heart};
         int[] color = {R.color.blue, R.color.red, R.color.green, R.color.yellow};
@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
             buttonDatas.add(buttonData);
         }
         button.setButtonDatas(buttonDatas);
-        button.setButtonClickListener(new OnButtonClickListener() {
+        button.setButtonEventListener(new ButtonEventListener() {
             @Override
             public void onButtonClicked(int index) {
 //                if (index == -1) {
@@ -49,6 +49,18 @@ public class MainActivity extends Activity {
 //                } else {
 //                    Toast.makeText(MainActivity.this, str[index], Toast.LENGTH_SHORT).show();
 //                }
+            }
+
+            @Override
+            public void onExpand() {
+//                ButtonData buttonData = buttonDatas.get(0);
+//                buttonData.configIconButton(R.drawable.refresh, 0);
+            }
+
+            @Override
+            public void onCollapse() {
+//                ButtonData buttonData = buttonDatas.get(0);
+//                buttonData.configIconButton(R.drawable.plus, 20);
             }
         });
     }
