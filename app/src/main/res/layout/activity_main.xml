@@ -17,7 +17,7 @@
         app:aebButtonGapDp="55dp"
         app:aebButtonElevation="4dp"
         app:aebButtonMainTextColor="#ffff5656"
-        app:aebButtonSubTextColor="#ffff5656"
+        app:aebButtonSubTextColor="#ff0000ff"
         app:aebStartAngleDegree="180"
         app:aebEndAngleDegree="90"
         app:aebIsSelectionMode="false"

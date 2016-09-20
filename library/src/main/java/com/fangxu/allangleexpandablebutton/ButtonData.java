@@ -9,27 +9,22 @@ public class ButtonData implements Cloneable{
     private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
 
     private boolean isMainButton = false;
-    private boolean iconData;
+    private boolean iconButton;
     private String text;
     private int iconResId;
-    private float paddingDp;
-    private int buttonSizePx;
-    private int textSizePx;
-    private int textColor;
+    private float iconPaddingDp;
     private int backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
         ButtonData buttonData = (ButtonData)super.clone();
-        buttonData.setIsIconData(this.iconData).setButtonSizePx(this.buttonSizePx)
-                .setBackgroundColor(this.backgroundColor).setIsMainButton(this.isMainButton)
-                .setIconResId(this.iconResId).setPaddingDp(this.paddingDp).setText(this.text)
-                .setTextColor(this.textColor).setTextSizePx(this.textSizePx);
+        buttonData.setIsIconButton(this.iconButton).setBackgroundColor(this.backgroundColor).setIsMainButton(this.isMainButton)
+                .setIconResId(this.iconResId).setIconPaddingDp(this.iconPaddingDp).setText(this.text);
         return buttonData;
     }
 
-    public ButtonData(boolean iconData) {
-        this.iconData = iconData;
+    public ButtonData(boolean iconButton) {
+        this.iconButton = iconButton;
     }
 
     public ButtonData setIsMainButton(boolean isMainButton) {
@@ -41,8 +36,8 @@ public class ButtonData implements Cloneable{
         return isMainButton;
     }
 
-    public ButtonData setIsIconData(boolean isIconData) {
-        iconData = isIconData;
+    public ButtonData setIsIconButton(boolean isIconButton) {
+        iconButton = isIconButton;
         return this;
     }
 
@@ -64,43 +59,16 @@ public class ButtonData implements Cloneable{
         return this;
     }
 
-    public boolean isIconData() {
-        return iconData;
+    public boolean isIconButton() {
+        return iconButton;
     }
 
-    public ButtonData setButtonSizePx(int buttonSizePx) {
-        this.buttonSizePx = buttonSizePx;
-        return this;
+    public float getIconPaddingDp() {
+        return iconPaddingDp;
     }
 
-    public int getButtonSizePx() {
-        return buttonSizePx;
-    }
-
-    public int getTextSizePx() {
-        return textSizePx;
-    }
-
-    public ButtonData setTextSizePx(int textSizeSp) {
-        this.textSizePx = textSizeSp;
-        return this;
-    }
-
-    public float getPaddingDp() {
-        return paddingDp;
-    }
-
-    public ButtonData setPaddingDp(float padding) {
-        this.paddingDp = padding;
-        return this;
-    }
-
-    public int getTextColor() {
-        return textColor;
-    }
-
-    public ButtonData setTextColor(int textColor) {
-        this.textColor = textColor;
+    public ButtonData setIconPaddingDp(float padding) {
+        this.iconPaddingDp = padding;
         return this;
     }
 

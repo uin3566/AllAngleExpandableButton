@@ -16,26 +16,26 @@ public class AngleCalculator {
         }
     }
 
-    public int getDesX(int radius, int index) {
+    public int getMoveX(int radius, int index) {
         double angle =  getCurrentAngle(index);
-        int desX;
+        int moveX;
         if (averageAngleRadians == 0) {
-            desX = (int)(Math.cos(angle) * radius) * index;
+            moveX = (int)(Math.cos(angle) * radius) * index;
         } else {
-            desX = (int)(Math.cos(angle) * radius);
+            moveX = (int)(Math.cos(angle) * radius);
         }
-        return desX;
+        return moveX;
     }
 
-    public int getDesY(int radius, int index) {
+    public int getMoveY(int radius, int index) {
         double angle = getCurrentAngle(index);
-        int desY;
+        int moveY;
         if (averageAngleRadians == 0) {
-            desY = (int)(Math.sin(angle) * radius) * index;
+            moveY = (int)(Math.sin(angle) * radius) * index;
         } else {
-            desY = (int)(Math.sin(angle) * radius);
+            moveY = (int)(Math.sin(angle) * radius);
         }
-        return desY;
+        return moveY;
     }
 
     private double getCurrentAngle(int index) {
