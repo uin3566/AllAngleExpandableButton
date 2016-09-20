@@ -2,7 +2,6 @@ package com.fangxu.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
@@ -32,18 +31,23 @@ public class MainActivity extends Activity {
         int[] colors = {0xffffffff, 0xffff0000, 0xff00ff00, 0xff0000ff};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData = new ButtonData(false);
-            buttonData.setText(str[i]);
+            if (i == 0) {
+                buttonData.configIconButton(R.drawable.plus, 20);
+                buttonData.setBackgroundColorId(R.color.blue);
+            } else {
+                buttonData.configTextButton(str[i]);
+            }
             buttonDatas.add(buttonData);
         }
         button.setButtonDatas(buttonDatas);
         button.setButtonClickListener(new OnButtonClickListener() {
             @Override
             public void onButtonClicked(int index) {
-                if (index == -1) {
-                    Toast.makeText(MainActivity.this, "space", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, str[index], Toast.LENGTH_SHORT).show();
-                }
+//                if (index == -1) {
+//                    Toast.makeText(MainActivity.this, "space", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(MainActivity.this, str[index], Toast.LENGTH_SHORT).show();
+//                }
             }
         });
     }
