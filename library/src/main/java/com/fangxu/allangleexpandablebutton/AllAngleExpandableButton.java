@@ -17,13 +17,18 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.IntDef;
 import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.OvershootInterpolator;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +92,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private boolean animating = false;
     private boolean maskAttached = false;
     private float animateProgress;
-    private ValueAnimator updateValueAnimator;
+    private ValueAnimator expandValueAnimator;
+    private ValueAnimator collapseValueAnimator;
     private Path ripplePath;
     private RippleInfo rippleInfo = new RippleInfo();
     private MaskView maskView;
@@ -132,6 +138,47 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         rippleEffect = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebRippleEffect, true);
         rippleColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebRippleColor, rippleColor);
         ta.recycle();
+
+        initAnimators();
+    }
+
+    private void initAnimators() {
+        expandValueAnimator = ValueAnimator.ofFloat(0, 1);
+        expandValueAnimator.setDuration(animDuration);
+        expandValueAnimator.setInterpolator(new OvershootInterpolator());
+        expandValueAnimator.addUpdateListener(this);
+        expandValueAnimator.addListener(new SimpleAnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                animating = true;
+                attachMask();
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                animating = false;
+                expanded = true;
+            }
+        });
+
+        collapseValueAnimator = ValueAnimator.ofFloat(1, 0);
+        collapseValueAnimator.setDuration(animDuration);
+        collapseValueAnimator.setInterpolator(new AnticipateInterpolator());
+        collapseValueAnimator.addUpdateListener(this);
+        collapseValueAnimator.addListener(new SimpleAnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                animating = true;
+                maskView.reset();
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                animating = false;
+                expanded = false;
+                detachMask();
+            }
+        });
     }
 
     public void setButtonClickListener(OnButtonClickListener listener) {
@@ -217,10 +264,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     @Override
     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-        if (valueAnimator == updateValueAnimator) {
-            animateProgress = (float) valueAnimator.getAnimatedValue();
-            Log.i("animateProgress-->", "" + animateProgress);
-        }
+        animateProgress = (float) valueAnimator.getAnimatedValue();
         if (maskAttached) {
             maskView.updateButtons2();
             maskView.invalidate();
@@ -228,80 +272,17 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     }
 
     private void expand() {
-        cancelUpdateAnimator();
-        updateValueAnimator = ValueAnimator.ofFloat(0, 1);
-        updateValueAnimator.setDuration(animDuration);
-        updateValueAnimator.addUpdateListener(this);
-        updateValueAnimator.addListener(new Animator.AnimatorListener() {
-            boolean canceled = false;
-
-            @Override
-            public void onAnimationStart(Animator animator) {
-                animating = true;
-                attachMask();
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                animating = false;
-                if (!canceled) {
-                    expanded = true;
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-                canceled = true;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-        updateValueAnimator.start();
-    }
-
-    private void cancelUpdateAnimator() {
-        if (updateValueAnimator != null) {
-            updateValueAnimator.cancel();
+        if (expandValueAnimator.isRunning()) {
+            expandValueAnimator.cancel();
         }
+        expandValueAnimator.start();
     }
 
     private void collapse() {
-        cancelUpdateAnimator();
-        updateValueAnimator = ValueAnimator.ofFloat(1, 0);
-        updateValueAnimator.setDuration(animDuration);
-        updateValueAnimator.addUpdateListener(this);
-        updateValueAnimator.addListener(new Animator.AnimatorListener() {
-            boolean canceled = false;
-
-            @Override
-            public void onAnimationStart(Animator animator) {
-                animating = true;
-                maskView.reset();
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                animating = false;
-                if (!canceled) {
-                    expanded = false;
-                    detachMask();
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-                canceled = true;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-        updateValueAnimator.start();
+        if (collapseValueAnimator.isRunning()) {
+            collapseValueAnimator.cancel();
+        }
+        collapseValueAnimator.start();
     }
 
     private void attachMask() {
@@ -519,9 +500,20 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         private ValueAnimator touchRippleAnimator;
         private Paint paint;
         private Map<ButtonData, ExpandDesCoordinate> expandDesCoordinateMap;
-        private RippleState rippleState = RippleState.IDLE;
+        private int rippleState;
+        private float rippleRadius;
         private int clickIndex = 0;
         private Matrix[] matrixArray;
+
+        private static final int IDLE = 0;
+        private static final int RIPPLING = 1;
+        private static final int RIPPLED = 2;
+
+        @Retention(RetentionPolicy.SOURCE)
+        @IntDef({IDLE, RIPPLING, RIPPLED})
+        private @interface RippleState {
+
+        }
 
         public MaskView(Context context, AllAngleExpandableButton button) {
             super(context);
@@ -542,10 +534,23 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
             expandDesCoordinateMap = new HashMap<>(allAngleExpandableButton.buttonDatas.size());
             setBackgroundColor(allAngleExpandableButton.maskBackgroundColor);
-        }
 
-        private void reset() {
-            rippleState = RippleState.IDLE;
+            touchRippleAnimator = ValueAnimator.ofFloat(0, 1);
+            touchRippleAnimator.setDuration((long) ((float) allAngleExpandableButton.animDuration * 0.9f));
+            touchRippleAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    float animateProgress = (float) valueAnimator.getAnimatedValue();
+                    allAngleExpandableButton.rippleInfo.rippleRadius = rippleRadius * animateProgress;
+                }
+            });
+            touchRippleAnimator.addListener(new SimpleAnimatorListener() {
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    allAngleExpandableButton.rippleInfo.rippleRadius = 0;
+                    setRippleState(RIPPLED);
+                }
+            });
         }
 
         @Override
@@ -571,6 +576,19 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
                     break;
             }
             return super.onTouchEvent(event);
+        }
+
+        private void reset() {
+            setRippleState(IDLE);
+        }
+
+        private void setRippleState(@RippleState int state) {
+            rippleState = state;
+        }
+
+        @RippleState
+        private int getRippleState() {
+            return rippleState;
         }
 
         public void onClickMainButton() {
@@ -729,15 +747,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
 
         private void performRipple() {
-            if (rippleState == RippleState.IDLE) {
+            if (getRippleState() == IDLE) {
                 ripple(0, allAngleExpandableButton.pressX, allAngleExpandableButton.pressY);
-                rippleState = RippleState.RIPPLING;
-            }
-        }
-
-        private void stopRippleAnimator() {
-            if (touchRippleAnimator != null && touchRippleAnimator.isRunning()) {
-                touchRippleAnimator.cancel();
+                setRippleState(RIPPLING);
             }
         }
 
@@ -764,6 +776,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             allAngleExpandableButton.rippleInfo.rippleRadius = radius + pressToCenterDistance;
             allAngleExpandableButton.rippleInfo.rippleColor = getRippleColor(allAngleExpandableButton.rippleColor == Integer.MIN_VALUE ?
                     buttonData.getBackgroundColor() : allAngleExpandableButton.rippleColor);
+
+            rippleRadius = allAngleExpandableButton.rippleInfo.rippleRadius;
             startRippleAnimator();
         }
 
@@ -802,46 +816,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
 
         private void startRippleAnimator() {
-            stopRippleAnimator();
-            touchRippleAnimator = ValueAnimator.ofFloat(0, 1);
-            touchRippleAnimator.setDuration((long)((float)allAngleExpandableButton.animDuration * 0.9f));
-            final float rippleRadius = allAngleExpandableButton.rippleInfo.rippleRadius;
-            touchRippleAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    float animateProgress = (float) valueAnimator.getAnimatedValue();
-                    allAngleExpandableButton.rippleInfo.rippleRadius = rippleRadius * animateProgress;
-                }
-            });
-            touchRippleAnimator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    allAngleExpandableButton.rippleInfo.rippleRadius = 0;
-                    rippleState = RippleState.RIPPLED;
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animator) {
-
-                }
-            });
+            if (touchRippleAnimator.isRunning()) {
+                touchRippleAnimator.cancel();
+            }
             touchRippleAnimator.start();
-        }
-
-        private enum RippleState {
-            RIPPLING,
-            RIPPLED,
-            IDLE,
         }
 
         private static class ExpandDesCoordinate {
@@ -852,6 +830,28 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
                 this.desX = dexX;
                 this.desY = desY;
             }
+        }
+    }
+
+    private static class SimpleAnimatorListener implements Animator.AnimatorListener {
+        @Override
+        public void onAnimationStart(Animator animator) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animator) {
+
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animator) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animator) {
+
         }
     }
 }
