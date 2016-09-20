@@ -28,15 +28,16 @@ public class MainActivity extends Activity {
         AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable);
         List<ButtonData> buttonDatas = new ArrayList<>();
         final String[] str = {"A", "B", "C", "D"};
-        int[] colors = {0xffffffff, 0xffff0000, 0xff00ff00, 0xff0000ff};
+        int[] drawable = {R.drawable.plus, R.drawable.mark, R.drawable.settings, R.drawable.heart};
+        int[] color = {R.color.blue, R.color.red, R.color.green, R.color.yellow};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData = new ButtonData(false);
             if (i == 0) {
-                buttonData.configIconButton(R.drawable.plus, 20);
-                buttonData.setBackgroundColorId(R.color.blue);
+                buttonData.configIconButton(drawable[i], 20);
             } else {
-                buttonData.configTextButton(str[i]);
+                buttonData.configIconButton(drawable[i], 0);
             }
+            buttonData.setBackgroundColorId(color[i]);
             buttonDatas.add(buttonData);
         }
         button.setButtonDatas(buttonDatas);

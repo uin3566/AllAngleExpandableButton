@@ -14,13 +14,14 @@
         app:aebAnimDurationMillis="250"
         app:aebMainButtonSizeDp="56dp"
         app:aebSubButtonSizeDp="56dp"
-        app:aebButtonGapDp="55dp"
+        app:aebButtonGapDp="25dp"
         app:aebButtonElevation="4dp"
         app:aebMainButtonTextColor="#ffff5656"
         app:aebSubButtonTextColor="#ff0000ff"
-        app:aebStartAngleDegree="180"
+        app:aebStartAngleDegree="90"
         app:aebEndAngleDegree="90"
-        app:aebIsSelectionMode="true"
-        app:aebRippleEffect="true"/>
+        app:aebIsSelectionMode="false"
+        app:aebRippleEffect="true"
+        app:aebMainButtonRotateDegree="45"/>
 
 </RelativeLayout>

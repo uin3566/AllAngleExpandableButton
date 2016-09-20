@@ -17,6 +17,8 @@
         <attr name="aebSubButtonTextSizeSp" format="dimension|reference" />
         <attr name="aebRippleEffect" format="boolean" />
         <attr name="aebRippleColor" format="color|reference"/>
+        <attr name="aebMainButtonRotateDegree" format="integer|reference"/>
+        <attr name="aebMainButtonRotateAnimDurationMillis" format="integer|reference"/>
     </declare-styleable>
 
 </resources>
