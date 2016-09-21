@@ -22,6 +22,6 @@
         app:aebEndAngleDegree="90"
         app:aebIsSelectionMode="false"
         app:aebRippleEffect="true"
-        app:aebMainButtonRotateDegree="135"/>
+        app:aebMainButtonRotateDegree="45"/>
 
 </RelativeLayout>

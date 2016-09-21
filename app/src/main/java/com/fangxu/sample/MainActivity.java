@@ -31,13 +31,13 @@ public class MainActivity extends Activity {
         int[] drawable = {R.drawable.plus, R.drawable.mark, R.drawable.settings, R.drawable.heart};
         int[] color = {R.color.blue, R.color.red, R.color.green, R.color.yellow};
         for (int i = 0; i < 4; i++) {
-            ButtonData buttonData = new ButtonData(false);
+            ButtonData buttonData;
             if (i == 0) {
-                buttonData.configIconButton(drawable[i], 20);
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 20);
             } else {
-                buttonData.configIconButton(drawable[i], 0);
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 0);
             }
-            buttonData.setBackgroundColorId(color[i]);
+            buttonData.setBackgroundColorId(this, color[i]);
             buttonDatas.add(buttonData);
         }
         button.setButtonDatas(buttonDatas);

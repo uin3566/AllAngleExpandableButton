@@ -1,43 +1,51 @@
 package com.fangxu.allangleexpandablebutton;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+
 /**
  * Created by dear33 on 2016/9/9.
  */
 public class ButtonData implements Cloneable{
-    private static final int DEFAULT_BACKGROUND_COLOR_ID = android.R.color.white;
+    private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
 
     private boolean isMainButton = false;
     private boolean iconButton;
 
     private String text;
-    private int iconResId;
+    private Drawable icon;
     private float iconPaddingDp;
-    private int backgroundColorId = DEFAULT_BACKGROUND_COLOR_ID;
+    private int backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
         ButtonData buttonData = (ButtonData)super.clone();
         buttonData.setIsIconButton(this.iconButton);
-        buttonData.setBackgroundColorId(this.backgroundColorId);
+        buttonData.setBackgroundColor(this.backgroundColor);
         buttonData.setIsMainButton(this.isMainButton);
-        buttonData.setIconResId(this.iconResId);
+        buttonData.setIcon(this.icon);
         buttonData.setIconPaddingDp(this.iconPaddingDp);
         buttonData.setText(this.text);
         return buttonData;
     }
 
-    public void configTextButton(String text) {
-        this.iconButton = false;
-        this.text = text;
+    public static ButtonData buildTextButton(String text) {
+        ButtonData buttonData = new ButtonData(false);
+        buttonData.iconButton = false;
+        buttonData.text = text;
+        return buttonData;
     }
 
-    public void configIconButton(int iconResId, float iconPaddingDp) {
-        this.iconButton = true;
-        this.iconResId = iconResId;
-        this.iconPaddingDp = iconPaddingDp;
+    public static ButtonData buildIconButton(Context context, int iconResId, float iconPaddingDp) {
+        ButtonData buttonData = new ButtonData(true);
+        buttonData.iconButton = true;
+        buttonData.iconPaddingDp = iconPaddingDp;
+        buttonData.icon = context.getResources().getDrawable(iconResId);
+        return buttonData;
     }
 
-    public ButtonData(boolean iconButton) {
+    private ButtonData(boolean iconButton) {
         this.iconButton = iconButton;
     }
 
@@ -61,12 +69,16 @@ public class ButtonData implements Cloneable{
         this.text = text;
     }
 
-    public int getIconResId() {
-        return iconResId;
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
     }
 
-    public void setIconResId(int iconResId) {
-        this.iconResId = iconResId;
+    public Drawable getIcon() {
+        return this.icon;
+    }
+
+    public void setIconResId(Context context, int iconResId) {
+        this.icon = context.getResources().getDrawable(iconResId);
     }
 
     public boolean isIconButton() {
@@ -81,11 +93,15 @@ public class ButtonData implements Cloneable{
         this.iconPaddingDp = padding;
     }
 
-    public int getBackgroundColorId() {
-        return backgroundColorId;
+    public int getBackgroundColor() {
+        return backgroundColor;
     }
 
-    public void setBackgroundColorId(int backgroundColorId) {
-        this.backgroundColorId = backgroundColorId;
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public void setBackgroundColorId(Context context, int backgroundColorId) {
+        this.backgroundColor = context.getResources().getColor(backgroundColorId);
     }
 }
