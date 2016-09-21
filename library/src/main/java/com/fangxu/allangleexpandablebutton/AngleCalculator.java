@@ -16,29 +16,29 @@ public class AngleCalculator {
         }
     }
 
-    public int getMoveX(int radius, int index) {
-        double angle =  getCurrentAngle(index);
+    public int getMoveX(int radius, int buttonIndex) {
+        double angle =  getCurrentAngle(buttonIndex);
         int moveX;
         if (averageAngleRadians == 0) {
-            moveX = (int)(Math.cos(angle) * radius) * index;
+            moveX = (int)(Math.cos(angle) * radius) * buttonIndex;
         } else {
             moveX = (int)(Math.cos(angle) * radius);
         }
         return moveX;
     }
 
-    public int getMoveY(int radius, int index) {
-        double angle = getCurrentAngle(index);
+    public int getMoveY(int radius, int buttonIndex) {
+        double angle = getCurrentAngle(buttonIndex);
         int moveY;
         if (averageAngleRadians == 0) {
-            moveY = (int)(Math.sin(angle) * radius) * index;
+            moveY = (int)(Math.sin(angle) * radius) * buttonIndex;
         } else {
             moveY = (int)(Math.sin(angle) * radius);
         }
         return moveY;
     }
 
-    private double getCurrentAngle(int index) {
-        return startAngleRadians + averageAngleRadians * (index - 1);
+    private double getCurrentAngle(int buttonIndex) {
+        return startAngleRadians + averageAngleRadians * (buttonIndex - 1);
     }
 }
