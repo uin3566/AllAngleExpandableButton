@@ -498,7 +498,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         if (buttonData.isIconButton()) {
             Drawable drawable = buttonData.getIcon();
             if (drawable == null) {
-                throw new RuntimeException("can not get Drawable by iconRes id");
+                throw new IllegalArgumentException("iconData is true, drawable cannot be null");
             }
             int left = (int) rectF.left + dp2px(getContext(), buttonData.getIconPaddingDp());
             int right = (int) rectF.right - dp2px(getContext(), buttonData.getIconPaddingDp());
@@ -507,14 +507,27 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             drawable.setBounds(left, top, right, bottom);
             drawable.draw(canvas);
         } else {
-            if (buttonData.getText() == null) {
+            if (buttonData.getTexts() == null) {
                 throw new IllegalArgumentException("iconData is false, text cannot be null");
             }
-            String text = buttonData.getText();
+            String[] texts = buttonData.getTexts();
             int sizePx = buttonData.isMainButton() ? mainButtonTextSize : subButtonTextSize;
             int textColor = buttonData.isMainButton() ? mainButtonTextColor : subButtonTextColor;
             textPaint = getTextPaint(sizePx, textColor);
-            canvas.drawText(text, rectF.centerX(), rectF.centerY() - (textPaint.ascent() + textPaint.descent()) / 2, textPaint);
+            drawTexts(texts, canvas, rectF.centerX(), rectF.centerY());
+        }
+    }
+
+    private void drawTexts(String[] strings, Canvas canvas, float x, float y) {
+        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+        float top = fontMetrics.top;
+        float bottom = fontMetrics.bottom;
+        int length = strings.length;
+        float total = (length - 1) * (-top + bottom) + (-fontMetrics.ascent + fontMetrics.descent);
+        float offset = total / 2 - bottom;
+        for (int i = 0; i < length; i++) {
+            float yAxis = -(length - i - 1) * (-top + bottom) + offset;
+            canvas.drawText(strings[i], x, y + yAxis, textPaint);
         }
     }
 
@@ -767,7 +780,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
                         mainButton.setIcon(buttonData.getIcon());
                     } else {
                         mainButton.setIsIconButton(false);
-                        mainButton.setText(buttonData.getText());
+                        mainButton.setTexts(buttonData.getTexts());
                     }
                     mainButton.setBackgroundColor(buttonData.getBackgroundColor());
                 }

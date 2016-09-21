@@ -13,7 +13,7 @@ public class ButtonData implements Cloneable{
     private boolean isMainButton = false;
     private boolean iconButton;
 
-    private String text;
+    private String[] texts;
     private Drawable icon;
     private float iconPaddingDp;
     private int backgroundColor = DEFAULT_BACKGROUND_COLOR;
@@ -26,14 +26,14 @@ public class ButtonData implements Cloneable{
         buttonData.setIsMainButton(this.isMainButton);
         buttonData.setIcon(this.icon);
         buttonData.setIconPaddingDp(this.iconPaddingDp);
-        buttonData.setText(this.text);
+        buttonData.setTexts(this.texts);
         return buttonData;
     }
 
-    public static ButtonData buildTextButton(String text) {
+    public static ButtonData buildTextButton(String... text) {
         ButtonData buttonData = new ButtonData(false);
         buttonData.iconButton = false;
-        buttonData.text = text;
+        buttonData.setTexts(text);
         return buttonData;
     }
 
@@ -41,7 +41,7 @@ public class ButtonData implements Cloneable{
         ButtonData buttonData = new ButtonData(true);
         buttonData.iconButton = true;
         buttonData.iconPaddingDp = iconPaddingDp;
-        buttonData.icon = context.getResources().getDrawable(iconResId);
+        buttonData.setIconResId(context, iconResId);
         return buttonData;
     }
 
@@ -61,12 +61,15 @@ public class ButtonData implements Cloneable{
         iconButton = isIconButton;
     }
 
-    public String getText() {
-        return text;
+    public String[] getTexts() {
+        return texts;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setTexts(String... text) {
+        this.texts = new String[text.length];
+        for (int i = 0, length = text.length; i < length; i++) {
+            this.texts[i] = text[i];
+        }
     }
 
     public void setIcon(Drawable icon) {
