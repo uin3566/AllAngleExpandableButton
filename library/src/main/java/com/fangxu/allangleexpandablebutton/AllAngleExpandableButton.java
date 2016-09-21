@@ -1,6 +1,7 @@
 package com.fangxu.allangleexpandablebutton;
 
 import android.animation.Animator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -47,7 +48,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private static final int BUTTON_SHADOW_ALPHA = 24;
 
     private static final int DEFAULT_EXPAND_ANIMATE_DURATION = 225;
-    private static final int DEFAULT_ROTATE_ANIMATE_DURATION = 100;
+    private static final int DEFAULT_ROTATE_ANIMATE_DURATION = 175;
     private static final int DEFAULT_BUTTON_GAP_DP = 50;
     private static final int DEFAULT_BUTTON_MAIN_SIZE_DP = 60;
     private static final int DEFAULT_BUTTON_SUB_SIZE_DP = 60;
@@ -80,7 +81,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     private Bitmap mainShadowBitmap = null;
     private Bitmap subShadowBitmap = null;
-    Matrix shadowMatrix = new Matrix();
+    Matrix shadowMatrix;
 
     private int buttonSideMarginPx;
     private RectF buttonOval;
@@ -90,6 +91,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private Paint paint;
     private Paint textPaint;
 
+    private AngleCalculator angleCalculator;
     private boolean animating = false;
     private boolean maskAttached = false;
     private float expandProgress;
@@ -97,12 +99,13 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private ValueAnimator expandValueAnimator;
     private ValueAnimator collapseValueAnimator;
     private ValueAnimator rotateValueAnimator;
+    private TimeInterpolator overshootInterpolator;
+    private TimeInterpolator anticipateInterpolator;
     private Path ripplePath;
-    private RippleInfo rippleInfo = new RippleInfo();
+    private RippleInfo rippleInfo;
     private MaskView maskView;
-    private AngleCalculator angleCalculator;
-    private PointF pressPointF = new PointF();
-    private RectF rawButtonRectF = new RectF();
+    private PointF pressPointF;
+    private RectF rawButtonRectF;
     private int pressTmpColor;
     private int pressPosition;
 
@@ -111,7 +114,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({INBUTTON, OUTOFBUTTON})
-    private @interface PRESSPOSITION {
+    private @interface PressPosition {
 
     }
 
@@ -164,13 +167,21 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         rippleColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebRippleColor, rippleColor);
         ta.recycle();
 
+        rippleInfo = new RippleInfo();
+        pressPointF = new PointF();
+        rawButtonRectF = new RectF();
+        shadowMatrix = new Matrix();
+
         initAnimators();
     }
 
     private void initAnimators() {
+        overshootInterpolator = new OvershootInterpolator();
+        anticipateInterpolator = new AnticipateInterpolator();
+
         expandValueAnimator = ValueAnimator.ofFloat(0, 1);
         expandValueAnimator.setDuration(expandAnimDuration);
-        expandValueAnimator.setInterpolator(new OvershootInterpolator());
+        expandValueAnimator.setInterpolator(overshootInterpolator);
         expandValueAnimator.addUpdateListener(this);
         expandValueAnimator.addListener(new SimpleAnimatorListener() {
             @Override
@@ -188,7 +199,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
         collapseValueAnimator = ValueAnimator.ofFloat(1, 0);
         collapseValueAnimator.setDuration(expandAnimDuration);
-        collapseValueAnimator.setInterpolator(new AnticipateInterpolator());
+        collapseValueAnimator.setInterpolator(anticipateInterpolator);
         collapseValueAnimator.addUpdateListener(this);
         collapseValueAnimator.addListener(new SimpleAnimatorListener() {
             @Override
@@ -201,7 +212,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             public void onAnimationEnd(Animator animator) {
                 animating = false;
                 expanded = false;
-                detachMask();
+                if (expandAnimDuration >= rotateAnimDuration) {
+                    detachMask();
+                }
             }
         });
 
@@ -211,8 +224,15 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
         rotateValueAnimator = ValueAnimator.ofFloat(0, 1);
         rotateValueAnimator.setDuration(rotateAnimDuration);
-        rotateValueAnimator.setInterpolator(new OvershootInterpolator());
         rotateValueAnimator.addUpdateListener(this);
+        rotateValueAnimator.addListener(new SimpleAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                if (!expanded && expandAnimDuration < rotateAnimDuration) {
+                    detachMask();
+                }
+            }
+        });
     }
 
     public void setButtonEventListener(ButtonEventListener listener) {
@@ -249,12 +269,12 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         return this.buttonDatas.get(0);
     }
 
-    @PRESSPOSITION
+    @PressPosition
     public int getPressPosition() {
         return pressPosition;
     }
 
-    public void setPressPosition(@PRESSPOSITION int pressPosition) {
+    public void setPressPosition(@PressPosition int pressPosition) {
         this.pressPosition = pressPosition;
     }
 
@@ -396,8 +416,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
                 rotateValueAnimator.cancel();
             }
             if (expand) {
+                rotateValueAnimator.setInterpolator(overshootInterpolator);
                 rotateValueAnimator.setFloatValues(0, 1);
             } else {
+                rotateValueAnimator.setInterpolator(anticipateInterpolator);
                 rotateValueAnimator.setFloatValues(1, 0);
             }
             rotateValueAnimator.start();
@@ -836,7 +858,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             int subButtonRadius = allAngleExpandableButton.subButtonSizePx / 2;
             Matrix matrix = matrixArray[0];
             matrix.reset();
-            matrix.postRotate(45 * allAngleExpandableButton.rotateProgress, allAngleExpandableButton.rawButtonRectF.centerX(), allAngleExpandableButton.rawButtonRectF.centerY());
+            matrix.postRotate(allAngleExpandableButton.mainButtonRotateDegree * allAngleExpandableButton.rotateProgress, allAngleExpandableButton.rawButtonRectF.centerX(), allAngleExpandableButton.rawButtonRectF.centerY());
             for (int i = 1; i < buttonDatas.size(); i++) {
                 matrix = matrixArray[i];
                 ButtonData buttonData = buttonDatas.get(i);

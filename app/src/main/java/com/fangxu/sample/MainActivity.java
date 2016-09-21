@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
     }
 
     private void createButton() {
-        AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable);
+        final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable);
         final List<ButtonData> buttonDatas = new ArrayList<>();
         final String[] str = {"A", "B", "C", "D"};
         int[] drawable = {R.drawable.plus, R.drawable.mark, R.drawable.settings, R.drawable.heart};
@@ -44,23 +44,17 @@ public class MainActivity extends Activity {
         button.setButtonEventListener(new ButtonEventListener() {
             @Override
             public void onButtonClicked(int index) {
-//                if (index == -1) {
-//                    Toast.makeText(MainActivity.this, "space", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(MainActivity.this, str[index], Toast.LENGTH_SHORT).show();
-//                }
+
             }
 
             @Override
             public void onExpand() {
-//                ButtonData buttonData = buttonDatas.get(0);
-//                buttonData.configIconButton(R.drawable.refresh, 0);
+
             }
 
             @Override
             public void onCollapse() {
-//                ButtonData buttonData = buttonDatas.get(0);
-//                buttonData.configIconButton(R.drawable.plus, 20);
+
             }
         });
     }
