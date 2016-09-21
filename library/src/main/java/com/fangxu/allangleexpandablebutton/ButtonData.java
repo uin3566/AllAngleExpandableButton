@@ -33,7 +33,7 @@ public class ButtonData implements Cloneable{
     public static ButtonData buildTextButton(String... text) {
         ButtonData buttonData = new ButtonData(false);
         buttonData.iconButton = false;
-        buttonData.setTexts(text);
+        buttonData.setText(text);
         return buttonData;
     }
 
@@ -65,7 +65,11 @@ public class ButtonData implements Cloneable{
         return texts;
     }
 
-    public void setTexts(String... text) {
+    public void setTexts(String[] texts) {
+        this.texts = texts;
+    }
+
+    public void setText(String... text) {
         this.texts = new String[text.length];
         for (int i = 0, length = text.length; i < length; i++) {
             this.texts[i] = text[i];
