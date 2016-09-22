@@ -41,7 +41,7 @@ Declare an AllAngleExpandableButton inside your XML file as show below, but note
     app:aebSubButtonTextColor="#ff0000ff"
     app:aebSubButtonTextSizeSp="18dp"/>
 ```
-then, use AllAngleExpandableButton in java code like this:  
+use AllAngleExpandableButton in java code like this:  
 * step1: define an ArrayList to store button infos and set the list to AllAngleExpandableButton
 ```java
     final List<ButtonData> buttonDatas = new ArrayList<>();
@@ -79,6 +79,29 @@ then, use AllAngleExpandableButton in java code like this:
         }
     });
 ```
+
+###Attributes
+all of the attributes are listed below:  
+
+|attribute|value type|defalut value| description|
+|---| ---| ---|---|
+|aebStartAngleDegree|integer|90|the start angle of the expand buttons|
+|aebEndAngleDegree|integer|180|the end angle of the expand buttons|
+|aebMaskBackgroundColor|color|Color.TRANSPARENT|the fullscreen background color when the buttons are expanded|
+|aebIsSelectionMode|boolean|true|if true,when a sub button is selected,the main button is setted as the selected sub button|
+|aebAnimDurationMillis|integer|225|expand and collapse animator duration in time milliseconds.|
+|aebMainButtonRotateAnimDurationMillis|integer|175|the main button rotate animator duration in time milliseconds|
+|aebMainButtonRotateDegree|integer|0|main button rotate degree while expanding|
+|aebButtonElevation|dimen|4dp|used for draw the button shadow.|
+|aebRippleEffect|boolean|true|ripple effect on main button when it's touched|
+|aebRippleColor|color|depends on button background|ripple effect color, default is the light color of the button background|
+|aebMainButtonSizeDp|dimen|60|the size of the main button|
+|aebMainButtonTextSizeSp|dimen|20|the size of the main button text|
+|aebMainButtonTextColor|color|Color.BLACK|the color of the main button text|
+|aebSubButtonSizeDp|dimen|60|the size of the sub button|
+|aebSubButtonTextSizeSp|dimen|20|the size of the sub button text|
+|aebSubButtonTextColor|color|Color.BLACK|the color of the sub button text|
+|aebButtonGapDp|dimen|50dp|the distance of main button and sub button.|
 
 ###License
 ```
