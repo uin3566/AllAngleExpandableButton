@@ -107,16 +107,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private PointF pressPointF;
     private RectF rawButtonRectF;
     private int pressTmpColor;
-    private int pressPosition;
-
-    private static final int IN_BUTTON = 0;
-    private static final int OUT_OF_BUTTON = 1;
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({IN_BUTTON, OUT_OF_BUTTON})
-    private @interface PressPosition {
-
-    }
+    private boolean pressInButton;
 
     private static class RippleInfo {
         float pressX;
@@ -273,15 +264,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         return this.buttonDatas.get(0);
     }
 
-    @PressPosition
-    public int getPressPosition() {
-        return pressPosition;
-    }
-
-    public void setPressPosition(@PressPosition int pressPosition) {
-        this.pressPosition = pressPosition;
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (buttonOval == null || buttonDatas == null || buttonDatas.isEmpty()) {
@@ -315,7 +297,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         pressPointF.set(event.getRawX(), event.getRawY());
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                setPressPosition(IN_BUTTON);
+                pressInButton = true;
                 boolean executeActionUp = !animating && buttonDatas != null && !buttonDatas.isEmpty();
                 if (executeActionUp) {
                     updatePressState(0, true);
@@ -344,14 +326,14 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             return;
         }
         if (isPointInRectF(pressPointF, rectF)) {
-            if (getPressPosition() == OUT_OF_BUTTON) {
+            if (!pressInButton) {
                 updatePressState(buttonIndex, true);
-                setPressPosition(IN_BUTTON);
+                pressInButton = true;
             }
         } else {
-            if (getPressPosition() == IN_BUTTON) {
+            if (pressInButton) {
                 updatePressState(buttonIndex, false);
-                setPressPosition(OUT_OF_BUTTON);
+                pressInButton = false;
             }
         }
     }
@@ -755,7 +737,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
                     if (allAngleExpandableButton.expanded) {
                         allAngleExpandableButton.updatePressState(clickIndex, true);
                     }
-                    allAngleExpandableButton.setPressPosition(IN_BUTTON);
+                    allAngleExpandableButton.pressInButton = true;
                     return allAngleExpandableButton.expanded;
                 case MotionEvent.ACTION_MOVE:
                     allAngleExpandableButton.updatePressPosition(clickIndex, touchRectF);
