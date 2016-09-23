@@ -8,18 +8,18 @@ It support two type of button, text button and icon button.You can define the bu
 ###Add to your project
 * step1:Add it in your root build.gradle at the end of repositories:
 ```xml
-	allprojects {
-		repositories {
-			...
-			maven { url "https://jitpack.io" }
-		}
-	}
+    allprojects {
+        repositories {
+    	    ...
+	    maven { url "https://jitpack.io" }
+        }
+    }
 ```
 * step2:Add the dependency:
 ```
-  dependencies {
-	        compile 'com.github.uin3566:AllAngleExpandableButton:v1.0.0-beta'
-	}
+    dependencies {
+        compile 'com.github.uin3566:AllAngleExpandableButton:v1.0.0-beta'
+    }
 ```
 
 ###Usage
