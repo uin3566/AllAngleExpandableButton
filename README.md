@@ -6,12 +6,20 @@ An button menu that can expand from any angle to any angle as you like.
 It support two type of button, text button and icon button.You can define the button style as you like, such as button size, button background color, text size,button shadow and so on.
 
 ###Add to your project
+* step1:Add it in your root build.gradle at the end of repositories:
 ```xml
-
-dependencies {
-  compile 'com.fangxu:AllAngleExpandableButton:1.0.0'
-}
-
+	allprojects {
+		repositories {
+			...
+			maven { url "https://jitpack.io" }
+		}
+	}
+```
+* step2:Add the dependency:
+```
+  dependencies {
+	        compile 'com.github.uin3566:AllAngleExpandableButton:v1.0.0-beta'
+	}
 ```
 
 ###Usage
