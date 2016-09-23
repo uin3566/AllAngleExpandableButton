@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnticipateInterpolator;
+import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 import java.lang.annotation.Retention;
@@ -99,8 +100,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private ValueAnimator expandValueAnimator;
     private ValueAnimator collapseValueAnimator;
     private ValueAnimator rotateValueAnimator;
-    private TimeInterpolator overshootInterpolator;
-    private TimeInterpolator anticipateInterpolator;
+    private Interpolator overshootInterpolator;
+    private Interpolator anticipateInterpolator;
     private Path ripplePath;
     private RippleInfo rippleInfo;
     private MaskView maskView;
@@ -228,6 +229,18 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     public void setButtonEventListener(ButtonEventListener listener) {
         buttonEventListener = listener;
+    }
+
+    public void setExpandAnimatorInterpolator(Interpolator interpolator) {
+        if (interpolator != null) {
+            expandValueAnimator.setInterpolator(interpolator);
+        }
+    }
+
+    public void setCollapseAnimatorInterpolator(Interpolator interpolator) {
+        if (interpolator != null) {
+            collapseValueAnimator.setInterpolator(interpolator);
+        }
     }
 
     public AllAngleExpandableButton setButtonDatas(List<ButtonData> buttonDatas) {

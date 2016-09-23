@@ -1,28 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
-        android:id="@+id/button_expandable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
-        app:aebAnimDurationMillis="175"
-        app:aebMainButtonSizeDp="56dp"
-        app:aebSubButtonSizeDp="56dp"
-        app:aebButtonGapDp="25dp"
-        app:aebButtonElevation="4dp"
-        app:aebMainButtonTextColor="#ffff5656"
-        app:aebSubButtonTextColor="#ff0000ff"
-        app:aebStartAngleDegree="90"
-        app:aebEndAngleDegree="90"
-        app:aebIsSelectionMode="false"
-        app:aebRippleEffect="true"
-        app:aebMainButtonRotateDegree="-135"
-        app:aebMainButtonRotateAnimDurationMillis="300"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-</RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
+                android:id="@+id/button_expandable_90_90"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:aebAnimDurationMillis="175"
+                app:aebButtonElevation="4dp"
+                app:aebButtonGapDp="25dp"
+                app:aebEndAngleDegree="90"
+                app:aebIsSelectionMode="false"
+                app:aebMainButtonRotateAnimDurationMillis="300"
+                app:aebMainButtonRotateDegree="-135"
+                app:aebMainButtonSizeDp="56dp"
+                app:aebMainButtonTextColor="#ffff5656"
+                app:aebRippleEffect="true"
+                app:aebStartAngleDegree="90"
+                app:aebSubButtonSizeDp="56dp"
+                app:aebSubButtonTextColor="#ff0000ff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="startAngle=90" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="endAngle=90" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
+                android:id="@+id/button_expandable_90_180"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:aebAnimDurationMillis="175"
+                app:aebButtonElevation="4dp"
+                app:aebButtonGapDp="45dp"
+                app:aebEndAngleDegree="180"
+                app:aebIsSelectionMode="false"
+                app:aebMainButtonRotateAnimDurationMillis="300"
+                app:aebMainButtonRotateDegree="-135"
+                app:aebMainButtonSizeDp="56dp"
+                app:aebMainButtonTextColor="#ffff5656"
+                app:aebRippleEffect="true"
+                app:aebStartAngleDegree="90"
+                app:aebSubButtonSizeDp="56dp"
+                app:aebSubButtonTextColor="#ff0000ff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="startAngle=90" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="endAngle=180" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
