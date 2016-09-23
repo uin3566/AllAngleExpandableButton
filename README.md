@@ -1,5 +1,6 @@
 AllAngleExpandableButton
 =============
+[![](https://jitpack.io/v/uin3566/AllAngleExpandableButton.svg)](https://jitpack.io/#uin3566/AllAngleExpandableButton)  
 
 An button menu that can expand from any angle to any angle as you like.  
 It support two type of button, text button and icon button.You can define the button style as you like, such as button size, button background color, text size,button shadow and so on.
@@ -86,11 +87,11 @@ all of the attributes are listed below:
 |attribute|value type|defalut value| description|
 |---| ---| ---|---|
 |aebStartAngleDegree|integer|90|the start angle of the expand buttons|
-|aebEndAngleDegree|integer|180|the end angle of the expand buttons|
+|aebEndAngleDegree|integer|90|the end angle of the expand buttons|
 |aebMaskBackgroundColor|color|Color.TRANSPARENT|the fullscreen background color when the buttons are expanded|
-|aebIsSelectionMode|boolean|true|if true,when a sub button is selected,the main button is setted as the selected sub button|
+|aebIsSelectionMode|boolean|false|if true,when a sub button is selected,the main button is setted as the selected sub button|
 |aebAnimDurationMillis|integer|225|expand and collapse animator duration in time milliseconds.|
-|aebMainButtonRotateAnimDurationMillis|integer|175|the main button rotate animator duration in time milliseconds|
+|aebMainButtonRotateAnimDurationMillis|integer|300|the main button rotate animator duration in time milliseconds|
 |aebMainButtonRotateDegree|integer|0|main button rotate degree while expanding|
 |aebButtonElevation|dimen|4dp|used for draw the button shadow.|
 |aebRippleEffect|boolean|true|ripple effect on main button when it's touched|
