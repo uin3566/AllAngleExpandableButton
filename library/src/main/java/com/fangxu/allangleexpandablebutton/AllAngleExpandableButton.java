@@ -48,16 +48,16 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private static final int BUTTON_SHADOW_ALPHA = 24;
 
     private static final int DEFAULT_EXPAND_ANIMATE_DURATION = 225;
-    private static final int DEFAULT_ROTATE_ANIMATE_DURATION = 175;
-    private static final int DEFAULT_BUTTON_GAP_DP = 50;
+    private static final int DEFAULT_ROTATE_ANIMATE_DURATION = 300;
+    private static final int DEFAULT_BUTTON_GAP_DP = 25;
     private static final int DEFAULT_BUTTON_MAIN_SIZE_DP = 60;
     private static final int DEFAULT_BUTTON_SUB_SIZE_DP = 60;
     private static final int DEFAULT_BUTTON_ELEVATION_DP = 4;
     private static final int DEFAULT_BUTTON_TEXT_SIZE_SP = 20;
     private static final int DEFAULT_START_ANGLE = 90;
-    private static final int DEFAULT_END_ANGLE = 180;
+    private static final int DEFAULT_END_ANGLE = 90;
     private static final int DEFAULT_BUTTON_TEXT_COLOR = Color.BLACK;
-    private static final int DEFAULT_MASK_BACKGROUND_COLOR = 0x00000000;
+    private static final int DEFAULT_MASK_BACKGROUND_COLOR = Color.TRANSPARENT;
 
     private boolean expanded = false;
 
@@ -153,7 +153,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         rotateAnimDuration = ta.getInteger(R.styleable.AllAngleExpandableButton_aebMainButtonRotateAnimDurationMillis, DEFAULT_ROTATE_ANIMATE_DURATION);
         maskBackgroundColor = ta.getInteger(R.styleable.AllAngleExpandableButton_aebMaskBackgroundColor, DEFAULT_MASK_BACKGROUND_COLOR);
         mainButtonRotateDegree = ta.getInteger(R.styleable.AllAngleExpandableButton_aebMainButtonRotateDegree, mainButtonRotateDegree);
-        isSelectionMode = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebIsSelectionMode, true);
+        isSelectionMode = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebIsSelectionMode, false);
         rippleEffect = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebRippleEffect, true);
         rippleColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebRippleColor, rippleColor);
         ta.recycle();

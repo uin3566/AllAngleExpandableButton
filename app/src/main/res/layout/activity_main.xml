@@ -23,6 +23,6 @@
         app:aebIsSelectionMode="false"
         app:aebRippleEffect="true"
         app:aebMainButtonRotateDegree="-135"
-        app:aebMainButtonRotateAnimDurationMillis="250"/>
+        app:aebMainButtonRotateAnimDurationMillis="300"/>
 
 </RelativeLayout>
