@@ -10,8 +10,8 @@ It support two type of button, text button and icon button.You can define the bu
 ```xml
     allprojects {
         repositories {
-    	    ...
-	    maven { url "https://jitpack.io" }
+            ...
+	        maven { url "https://jitpack.io" }
         }
     }
 ```
