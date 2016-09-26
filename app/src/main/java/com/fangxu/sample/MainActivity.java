@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         installButton90to90();
         installButton90to180();
+        installButton110to250();
     }
 
     private void installButton90to90() {
@@ -33,7 +34,7 @@ public class MainActivity extends Activity {
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData;
             if (i == 0) {
-                buttonData = ButtonData.buildIconButton(this, drawable[i], 20);
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 15);
             } else {
                 buttonData = ButtonData.buildIconButton(this, drawable[i], 0);
             }
@@ -67,7 +68,41 @@ public class MainActivity extends Activity {
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData;
             if (i == 0) {
-                buttonData = ButtonData.buildIconButton(this, drawable[i], 20);
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 15);
+            } else {
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 0);
+            }
+            buttonData.setBackgroundColorId(this, color[i]);
+            buttonDatas.add(buttonData);
+        }
+        button.setButtonDatas(buttonDatas);
+        button.setButtonEventListener(new ButtonEventListener() {
+            @Override
+            public void onButtonClicked(int index) {
+
+            }
+
+            @Override
+            public void onExpand() {
+
+            }
+
+            @Override
+            public void onCollapse() {
+
+            }
+        });
+    }
+
+    private void installButton110to250() {
+        final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
+        final List<ButtonData> buttonDatas = new ArrayList<>();
+        int[] drawable = {R.drawable.edit, R.drawable.refresh, R.drawable.mark, R.drawable.settings, R.drawable.heart, R.drawable.search, R.drawable.copy};
+        int[] color = {R.color.black, R.color.orange, R.color.blue, R.color.pink, R.color.yellow, R.color.red, R.color.green};
+        for (int i = 0; i < 7; i++) {
+            ButtonData buttonData;
+            if (i == 0) {
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 15);
             } else {
                 buttonData = ButtonData.buildIconButton(this, drawable[i], 0);
             }
