@@ -474,7 +474,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private void drawButton(Canvas canvas, Paint paint, ButtonData buttonData) {
         drawShadow(canvas, paint, buttonData);
         drawContent(canvas, paint, buttonData);
-        drawLabel(canvas, paint, buttonData);
         drawRipple(canvas, paint, buttonData);
     }
 
@@ -536,29 +535,12 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             int sizePx = buttonData.isMainButton() ? mainButtonTextSize : subButtonTextSize;
             int textColor = buttonData.isMainButton() ? mainButtonTextColor : subButtonTextColor;
             textPaint = getTextPaint(sizePx, textColor);
-            drawTexts(texts, canvas, textPaint, rectF.centerX(), rectF.centerY());
+            drawTexts(texts, canvas, rectF.centerX(), rectF.centerY());
         }
     }
 
-    Paint labelPaint = new Paint();
-
-    private void drawLabel(Canvas canvas, Paint paint, ButtonData buttonData) {
-        if (buttonData.isMainButton() || !buttonData.isIconButton()) {
-            return;
-        }
-
-        labelPaint.setAlpha(255);
-        labelPaint.setAntiAlias(true);
-        labelPaint.setColor(Color.BLACK);
-        labelPaint.setTextAlign(Paint.Align.LEFT);
-        labelPaint.setTextSize(45);
-        RectF rectF = buttonRects.get(buttonData);
-        String[] str = {"sb ri ni ma"};
-        drawTexts(str, canvas, labelPaint, rectF.right + 10, rectF.centerY());
-    }
-
-    private void drawTexts(String[] strings, Canvas canvas, Paint paint,  float x, float y) {
-        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+    private void drawTexts(String[] strings, Canvas canvas, float x, float y) {
+        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
         float top = fontMetrics.top;
         float bottom = fontMetrics.bottom;
         int length = strings.length;
@@ -566,7 +548,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         float offset = total / 2 - bottom;
         for (int i = 0; i < length; i++) {
             float yAxis = -(length - i - 1) * (-top + bottom) + offset;
-            canvas.drawText(strings[i], x, y + yAxis, paint);
+            canvas.drawText(strings[i], x, y + yAxis, textPaint);
         }
     }
 
