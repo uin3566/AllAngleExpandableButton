@@ -53,7 +53,7 @@ Declare an AllAngleExpandableButton inside your XML file as show below, but note
 use AllAngleExpandableButton in java code like this:  
 * step1: define an ArrayList to store button infos and set the list to AllAngleExpandableButton
 ```java
-    AllAngleExpandableButton button;
+    AllAngleExpandableButton button = (AllAngleExpandableButton)findViewById(R.id.button_expandable);
     final List<ButtonData> buttonDatas = new ArrayList<>();
     int[] drawable = {R.drawable.plus, R.drawable.mark, R.drawable.settings, R.drawable.heart};
     for (int i = 0; i < drawable.length; i++) {
