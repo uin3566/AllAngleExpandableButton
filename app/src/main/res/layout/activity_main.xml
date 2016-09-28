@@ -30,11 +30,9 @@
                 app:aebEndAngleDegree="250"
                 app:aebIsSelectionMode="false"
                 app:aebMainButtonSizeDp="45dp"
-                app:aebMainButtonTextColor="#ffff5656"
                 app:aebRippleEffect="true"
                 app:aebStartAngleDegree="110"
-                app:aebSubButtonSizeDp="45dp"
-                app:aebSubButtonTextColor="#ff0000ff" />
+                app:aebSubButtonSizeDp="45dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,6 +43,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="endAngle=250" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="80dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
+                android:id="@+id/button_expandable_0_360"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:aebAnimDurationMillis="175"
+                app:aebButtonElevation="4dp"
+                app:aebButtonGapDp="55dp"
+                app:aebEndAngleDegree="360"
+                app:aebIsSelectionMode="false"
+                app:aebMainButtonSizeDp="45dp"
+                app:aebRippleEffect="true"
+                app:aebStartAngleDegree="0"
+                app:aebSubButtonSizeDp="45dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="startAngle=0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="endAngle=360" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -76,11 +108,9 @@
                 app:aebMainButtonRotateAnimDurationMillis="300"
                 app:aebMainButtonRotateDegree="-135"
                 app:aebMainButtonSizeDp="45dp"
-                app:aebMainButtonTextColor="#ffff5656"
                 app:aebRippleEffect="true"
                 app:aebStartAngleDegree="90"
-                app:aebSubButtonSizeDp="45dp"
-                app:aebSubButtonTextColor="#ff0000ff" />
+                app:aebSubButtonSizeDp="45dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -115,11 +145,9 @@
                 app:aebMainButtonRotateAnimDurationMillis="300"
                 app:aebMainButtonRotateDegree="-135"
                 app:aebMainButtonSizeDp="45dp"
-                app:aebMainButtonTextColor="#ffff5656"
                 app:aebRippleEffect="true"
                 app:aebStartAngleDegree="90"
-                app:aebSubButtonSizeDp="45dp"
-                app:aebSubButtonTextColor="#ff0000ff" />
+                app:aebSubButtonSizeDp="45dp"/>
 
             <TextView
                 android:layout_width="wrap_content"

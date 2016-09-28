@@ -1,7 +1,6 @@
 package com.fangxu.allangleexpandablebutton;
 
 import android.animation.Animator;
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;

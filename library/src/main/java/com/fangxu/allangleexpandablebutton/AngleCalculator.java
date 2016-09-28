@@ -7,12 +7,17 @@ public class AngleCalculator {
 
     private double startAngleRadians;
     private double averageAngleRadians;
+    private boolean angleStartEqualsEnd;
 
     public AngleCalculator(float startAngleDegree, float endAngleDegree, int expandButtonCount) {
+        angleStartEqualsEnd = (endAngleDegree - startAngleDegree) == 0;
+        startAngleDegree = startAngleDegree % 360;
+        endAngleDegree = endAngleDegree % 360;
         this.startAngleRadians = Math.toRadians(startAngleDegree);
         double endAngleRadians = Math.toRadians(endAngleDegree);
         if (expandButtonCount > 1) {
             this.averageAngleRadians = (endAngleRadians - this.startAngleRadians) / (expandButtonCount - 1);
+            regulateAverageAngle(endAngleRadians, expandButtonCount);
         }
     }
 
@@ -36,6 +41,17 @@ public class AngleCalculator {
             moveY = (int)(Math.sin(angle) * radius);
         }
         return moveY;
+    }
+
+    private void regulateAverageAngle(double endAngleRadians, int expandButtonCount) {
+        if (!angleStartEqualsEnd && startAngleRadians == endAngleRadians) {
+            double tmp = 2 * Math.PI / expandButtonCount;
+            if (averageAngleRadians < 0) {
+                averageAngleRadians = -tmp;
+            } else {
+                averageAngleRadians = tmp;
+            }
+        }
     }
 
     private double getCurrentAngle(int buttonIndex) {
