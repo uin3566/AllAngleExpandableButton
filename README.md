@@ -53,28 +53,22 @@ Declare an AllAngleExpandableButton inside your XML file as show below, but note
 use AllAngleExpandableButton in java code like this:  
 * step1: define an ArrayList to store button infos and set the list to AllAngleExpandableButton
 ```java
+    AllAngleExpandableButton button;
     final List<ButtonData> buttonDatas = new ArrayList<>();
     int[] drawable = {R.drawable.plus, R.drawable.mark, R.drawable.settings, R.drawable.heart};
-    int[] color = {R.color.blue, R.color.red, R.color.green, R.color.yellow};
-    for (int i = 0; i < 4; i++) {
-        ButtonData buttonData;
-        if (i == 0) {
-            buttonData = ButtonData.buildIconButton(this, drawable[i], 20);
-        } else {
-            buttonData = ButtonData.buildIconButton(this, drawable[i], 0);
-        }
-        buttonData.setBackgroundColorId(this, color[i]);
+    for (int i = 0; i < drawable.length; i++) {
+        ButtonData buttonData = ButtonData.buildIconButton(context, drawable[i], 0);
         buttonDatas.add(buttonData);
     }
     button.setButtonDatas(buttonDatas);
 ```
 * step2: add listener to AllAngleExpandableButton
 ```java
-    AllAngleExpandableButton button;
     button.setButtonEventListener(new ButtonEventListener() {
         @Override
         public void onButtonClicked(int index) {
-            
+            //do whatever you want,the param index is counted from startAngle to endAngle,  
+	        //the value is from 1 to buttonCount - 1(buttonCount if aebIsSelectionMode=true)
         }
 
         @Override
