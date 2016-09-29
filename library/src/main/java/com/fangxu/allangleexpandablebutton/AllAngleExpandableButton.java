@@ -47,6 +47,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private static final int BUTTON_SHADOW_COLOR = 0xff000000;
     private static final int BUTTON_SHADOW_ALPHA = 24;
 
+    //default attribute values
     private static final int DEFAULT_EXPAND_ANIMATE_DURATION = 225;
     private static final int DEFAULT_ROTATE_ANIMATE_DURATION = 300;
     private static final int DEFAULT_BUTTON_GAP_DP = 25;
@@ -61,6 +62,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     private boolean expanded = false;
 
+    //attributes can be set in xml
     private float startAngle;
     private float endAngle;
     private int buttonGapPx;
@@ -109,6 +111,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private int pressTmpColor;
     private boolean pressInButton;
 
+    //store ripple effect params
     private static class RippleInfo {
         float pressX;
         float pressY;
@@ -283,6 +286,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             return;
         }
 
+        //the button size is only decided by mainButtonSizePx and buttonSideMarginPx that you configure in xml
         int desiredWidth = mainButtonSizePx + buttonSideMarginPx * 2;
         int desiredHeight = mainButtonSizePx + buttonSideMarginPx * 2;
 
@@ -333,6 +337,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         return super.onTouchEvent(event);
     }
 
+    /**
+     * used for update press effect when finger move
+     * @param rectF the rectF of the button to present button position
+     */
     private void updatePressPosition(int buttonIndex, RectF rectF) {
         if (buttonIndex < 0) {
             return;
@@ -470,6 +478,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         drawButton(canvas, paint, buttonData);
     }
 
+    /**
+     * this method is called by both {@link AllAngleExpandableButton} and {@link AllAngleExpandableButton.MaskView} at draw process
+     */
     private void drawButton(Canvas canvas, Paint paint, ButtonData buttonData) {
         drawShadow(canvas, paint, buttonData);
         drawContent(canvas, paint, buttonData);
@@ -538,6 +549,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
     }
 
+    /**
+     * draw texts in rows
+     */
     private void drawTexts(String[] strings, Canvas canvas, float x, float y) {
         Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
         float top = fontMetrics.top;
@@ -658,18 +672,21 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         return (int) (dpValue * scale + 0.5f);
     }
 
+    /**
+     * when expand,draw MaskView to overlap the fullscreen,the background is transparent default
+     */
     @SuppressLint("ViewConstructor")
     private static class MaskView extends View {
         private AllAngleExpandableButton allAngleExpandableButton;
-        private RectF initialSubButtonRectF;
-        private RectF touchRectF;
+        private RectF initialSubButtonRectF;//all of the sub button's initial rectF
+        private RectF touchRectF;//set when one of buttons are touched
         private ValueAnimator touchRippleAnimator;
         private Paint paint;
         private Map<ButtonData, ExpandMoveCoordinate> expandDesCoordinateMap;
         private int rippleState;
         private float rippleRadius;
         private int clickIndex = 0;
-        private Matrix[] matrixArray;
+        private Matrix[] matrixArray;//each button has a Matrix to perform expand/collapse animation
 
         private static final int IDLE = 0;
         private static final int RIPPLING = 1;
@@ -685,6 +702,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             float moveX;
             float moveY;
 
+            /**
+             * the members are set by getMoveX() and getMoveY() of {@link AngleCalculator}
+             */
             public ExpandMoveCoordinate(float moveX, float moveY) {
                 this.moveX = moveX;
                 this.moveY = moveY;
@@ -850,6 +870,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             }
         }
 
+        /**
+         * called before draw an expand/collapse frame
+         */
         private void updateButtons() {
             List<ButtonData> buttonDatas = allAngleExpandableButton.buttonDatas;
             int mainButtonRadius = allAngleExpandableButton.mainButtonSizePx / 2;
