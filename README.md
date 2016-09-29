@@ -3,7 +3,9 @@ AllAngleExpandableButton
 [![](https://jitpack.io/v/uin3566/AllAngleExpandableButton.svg)](https://jitpack.io/#uin3566/AllAngleExpandableButton)  
 
 An button menu that can expand from any angle to any angle as you like.  
-It support two type of button, text button and icon button.You can define the button style as you like, such as button size, button background color, text size,button shadow and so on.
+It support two type of button, text button and icon button.You can define the button style as you like, such as button size, button background color, text size, button shadow and so on.  
+
+![screenshot](/screenshot/demo.gif)
 
 ###Add to your project
 * step1:Add it in your root build.gradle at the end of repositories:
@@ -23,7 +25,7 @@ It support two type of button, text button and icon button.You can define the bu
 ```
 
 ###Usage
-Declare an AllAngleExpandableButton inside your XML file as show below, but note that the layout_width and layout_height is useless, the size of AllAngleExpandableButton is desided by aebMainButtonSizeDp and aebButtonElevation together at last. 
+Declare an AllAngleExpandableButton inside your XML file as show below, but note that the layout_width and layout_height is useless, the size of AllAngleExpandableButton is decided by aebMainButtonSizeDp and aebButtonElevation together at last. 
 ```xml
 <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
     android:id="@+id/button_expandable"
