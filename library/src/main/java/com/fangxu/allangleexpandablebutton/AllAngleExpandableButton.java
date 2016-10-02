@@ -20,12 +20,15 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.IntDef;
 import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -107,6 +110,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private RippleInfo rippleInfo;
     private MaskView maskView;
     private PointF pressPointF;
+    private Rect rawButtonRect;//act as the param of getGlobalVisibleRect(Rect rect) method
     private RectF rawButtonRectF;
     private int pressTmpColor;
     private boolean pressInButton;
@@ -163,10 +167,23 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
         rippleInfo = new RippleInfo();
         pressPointF = new PointF();
+        rawButtonRect = new Rect();
         rawButtonRectF = new RectF();
         shadowMatrix = new Matrix();
 
+        initViewTreeObserver();
         initAnimators();
+    }
+
+    private void initViewTreeObserver() {
+        ViewTreeObserver observer = getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getGlobalVisibleRect(rawButtonRect);
+                rawButtonRectF.set(rawButtonRect.left, rawButtonRect.top, rawButtonRect.right, rawButtonRect.bottom);
+            }
+        });
     }
 
     private void initAnimators() {
@@ -206,8 +223,12 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             public void onAnimationEnd(Animator animator) {
                 animating = false;
                 expanded = false;
-                if (expandAnimDuration >= rotateAnimDuration) {
+                if (rotateValueAnimator == null) {
                     detachMask();
+                } else {
+                    if (expandAnimDuration >= rotateAnimDuration) {
+                        detachMask();
+                    }//else call detachMask() until rotateValueAnimator ended
                 }
             }
         });
@@ -223,6 +244,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (!expanded && expandAnimDuration < rotateAnimDuration) {
+                    //call detachMask() when rotateValueAnimator ended
                     detachMask();
                 }
             }
@@ -639,9 +661,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         PointF buttonCenter = new PointF(getPaddingLeft() + width / 2, getPaddingTop() + height / 2);
         buttonOval = new RectF(buttonCenter.x - buttonRadius, buttonCenter.y - buttonRadius
                 , buttonCenter.x + buttonRadius, buttonCenter.y + buttonRadius);
-        Rect rect = new Rect();
-        getGlobalVisibleRect(rect);
-        rawButtonRectF.set(rect.left, rect.top, rect.right, rect.bottom);
+        getGlobalVisibleRect(rawButtonRect);
+        rawButtonRectF.set(rawButtonRect.left, rawButtonRect.top, rawButtonRect.right, rawButtonRect.bottom);
     }
 
     private int getLighterColor(int color) {
