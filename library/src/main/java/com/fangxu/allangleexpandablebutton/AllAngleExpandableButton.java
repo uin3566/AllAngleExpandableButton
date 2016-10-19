@@ -48,7 +48,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private ButtonEventListener buttonEventListener;
 
     private static final int BUTTON_SHADOW_COLOR = 0xff000000;
-    private static final int BUTTON_SHADOW_ALPHA = 24;
+    private static final int BUTTON_SHADOW_ALPHA = 32;
 
     //default attribute values
     private static final int DEFAULT_EXPAND_ANIMATE_DURATION = 225;
@@ -361,6 +361,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     /**
      * used for update press effect when finger move
+     *
      * @param rectF the rectF of the button to present button position
      */
     private void updatePressPosition(int buttonIndex, RectF rectF) {
@@ -514,12 +515,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             return;
         }
 
-        if (buttonData.isMainButton()) {
-            if (animating || expanded) {
-                return;
-            }
-        }
-
         float left, top;
         Bitmap bitmap;
         if (buttonData.isMainButton()) {
@@ -539,6 +534,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             shadowMatrix.postScale(expandProgress, expandProgress, bitmap.getWidth() / 2, bitmap.getHeight() / 2 + shadowOffset);
         }
         shadowMatrix.postTranslate(left, top);
+        if (buttonData.isMainButton()) {
+            //shadow did not need to perform rotate as button,so rotate reverse
+            shadowMatrix.postRotate(-mainButtonRotateDegree * rotateProgress, rectF.centerX(), rectF.centerY());
+        }
         paint.setAlpha(255);
         canvas.drawBitmap(bitmap, shadowMatrix, paint);
     }
@@ -900,7 +899,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             int subButtonRadius = allAngleExpandableButton.subButtonSizePx / 2;
             Matrix matrix = matrixArray[0];
             matrix.reset();
-            matrix.postRotate(allAngleExpandableButton.mainButtonRotateDegree * allAngleExpandableButton.rotateProgress, allAngleExpandableButton.rawButtonRectF.centerX(), allAngleExpandableButton.rawButtonRectF.centerY());
+            matrix.postRotate(allAngleExpandableButton.mainButtonRotateDegree * allAngleExpandableButton.rotateProgress
+                    , allAngleExpandableButton.rawButtonRectF.centerX(), allAngleExpandableButton.rawButtonRectF.centerY());
             for (int i = 1; i < buttonDatas.size(); i++) {
                 matrix = matrixArray[i];
                 ButtonData buttonData = buttonDatas.get(i);
