@@ -110,7 +110,8 @@
                 app:aebMainButtonSizeDp="45dp"
                 app:aebRippleEffect="true"
                 app:aebStartAngleDegree="90"
-                app:aebSubButtonSizeDp="45dp"/>
+                app:aebSubButtonSizeDp="45dp"
+                app:aebBlurBackground="true"/>
 
             <TextView
                 android:layout_width="wrap_content"

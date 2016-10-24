@@ -1,6 +1,7 @@
 package com.fangxu.allangleexpandablebutton;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.lang.annotation.Retention;
@@ -83,6 +85,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private boolean isSelectionMode;
     private boolean rippleEffect;
     private int rippleColor = Integer.MIN_VALUE;
+    private boolean blurBackground;
 
     private Bitmap mainShadowBitmap = null;
     private Bitmap subShadowBitmap = null;
@@ -109,6 +112,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private Path ripplePath;
     private RippleInfo rippleInfo;
     private MaskView maskView;
+    private ImageView blurImageView;
+    private ObjectAnimator blurAnimator;
     private PointF pressPointF;
     private Rect rawButtonRect;//act as the param of getGlobalVisibleRect(Rect rect) method
     private RectF rawButtonRectF;
@@ -163,6 +168,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         isSelectionMode = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebIsSelectionMode, false);
         rippleEffect = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebRippleEffect, true);
         rippleColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebRippleColor, rippleColor);
+        blurBackground = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebBlurBackground, false);
         ta.recycle();
 
         rippleInfo = new RippleInfo();
@@ -216,6 +222,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             @Override
             public void onAnimationStart(Animator animator) {
                 animating = true;
+                hideBlur();
                 maskView.reset();
             }
 
@@ -462,12 +469,47 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
         if (!maskAttached) {
             ViewGroup root = (ViewGroup) getRootView();
+            showBlur();
             root.addView(maskView);
             maskAttached = true;
             maskView.reset();
             maskView.initButtonRect();
             maskView.onClickMainButton();
         }
+    }
+
+    private void showBlur() {
+        if (!blurBackground) {
+            return;
+        }
+
+        if (blurImageView == null) {
+            blurImageView = new ImageView(getContext());
+            ViewGroup root = (ViewGroup)getRootView();
+            root.setDrawingCacheEnabled(true);
+            Bitmap bitmap = root.getDrawingCache();
+            Bitmap blurBitmap = Blur.getBlurBitmap(getContext(), bitmap, 10);
+            blurImageView.setImageBitmap(blurBitmap);
+            root.setDrawingCacheEnabled(false);
+            root.addView(blurImageView);
+        }
+
+        if (blurAnimator == null) {
+            blurAnimator = ObjectAnimator.ofFloat(blurImageView, "alpha", 0, 1).setDuration(expandAnimDuration);
+        } else {
+            blurAnimator.setFloatValues(0, 1);
+        }
+
+        blurAnimator.start();
+    }
+
+    private void hideBlur() {
+        if (!blurBackground) {
+            return;
+        }
+
+        blurAnimator.setFloatValues(1, 0);
+        blurAnimator.start();
     }
 
     private void detachMask() {

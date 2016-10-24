@@ -11,8 +11,8 @@
             android:name="com.fangxu.sample.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <category android:name="ANDROID.INTENT.CATEGORY.LAUNCHER" />
-                <action android:name="ANDROID.INTENT.ACTION.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
