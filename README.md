@@ -44,13 +44,15 @@ Declare an AllAngleExpandableButton inside your XML file as show below, but note
     app:aebMainButtonSizeDp="56dp"
     app:aebMainButtonTextColor="#ffff5656"
     app:aebMainButtonTextSizeSp="20dp"
-    app:aebMaskBackgroundColor="@color/blue"
+    app:aebMaskBackgroundColor="@color/transparent"
     app:aebRippleColor="@color/red"
     app:aebRippleEffect="true"
     app:aebStartAngleDegree="90"
     app:aebSubButtonSizeDp="56dp"
     app:aebSubButtonTextColor="#ff0000ff"
-    app:aebSubButtonTextSizeSp="18dp"/>
+    app:aebSubButtonTextSizeSp="18dp"
+    app:aebBlurBackground="true"
+    app:aebBlurRadius=10/>
 ```
 use AllAngleExpandableButton in java code like this:  
 * step1: define an ArrayList to store button infos and set the list to AllAngleExpandableButton
@@ -107,6 +109,8 @@ all of the attributes are listed below:
 |aebSubButtonTextSizeSp|dimen|20|the size of the sub button text|
 |aebSubButtonTextColor|color|Color.BLACK|the color of the sub button text|
 |aebButtonGapDp|dimen|50dp|the distance of main button and sub button.|
+|aebBlurBackground|boolean|false|if true, show blur background when expanded|
+|aebBlurRadius|float|10|blur radius|
 
 ###License
 ```
