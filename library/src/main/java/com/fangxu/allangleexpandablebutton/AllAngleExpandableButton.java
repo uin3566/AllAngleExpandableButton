@@ -120,6 +120,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private int pressTmpColor;
     private boolean pressInButton;
 
+    private QuickClickChecker checker;
+    private int checkThreshold;
+
     //store ripple effect params
     private static class RippleInfo {
         float pressX;
@@ -170,6 +173,13 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         rippleColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebRippleColor, rippleColor);
         blurBackground = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebBlurBackground, false);
         ta.recycle();
+
+        if (mainButtonRotateDegree != 0) {
+            checkThreshold = expandAnimDuration > rotateAnimDuration ? expandAnimDuration : rotateAnimDuration;
+        } else {
+            checkThreshold = expandAnimDuration;
+        }
+        checker = new QuickClickChecker(checkThreshold);
 
         rippleInfo = new RippleInfo();
         pressPointF = new PointF();
@@ -342,6 +352,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         pressPointF.set(event.getRawX(), event.getRawY());
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (checker.isQuick()) {
+                    return false;
+                }
                 pressInButton = true;
                 boolean executeActionUp = !animating && buttonDatas != null && !buttonDatas.isEmpty();
                 if (executeActionUp) {
@@ -356,11 +369,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
                     return true;
                 }
                 updatePressState(0, false);
-                if (expanded) {
-                    collapse();
-                } else {
-                    expand();
-                }
+                expand();
                 return true;
         }
         return super.onTouchEvent(event);
@@ -483,6 +492,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             return;
         }
 
+        //set invisible to avoid be blurred and show the blurred edge when expanded,
+        //must be called before do blur
+        setVisibility(INVISIBLE);
+
         if (blurImageView == null) {
             blurImageView = new ImageView(getContext());
             ViewGroup root = (ViewGroup)getRootView();
@@ -491,7 +504,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             Bitmap blurBitmap = Blur.getBlurBitmap(getContext(), bitmap, 10);
             blurImageView.setImageBitmap(blurBitmap);
             root.setDrawingCacheEnabled(false);
-            root.addView(blurImageView);
+            root.addView(blurImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
 
         if (blurAnimator == null) {
@@ -508,6 +521,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             return;
         }
 
+        setVisibility(VISIBLE);
         blurAnimator.setFloatValues(1, 0);
         blurAnimator.start();
     }
@@ -749,6 +763,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         private float rippleRadius;
         private int clickIndex = 0;
         private Matrix[] matrixArray;//each button has a Matrix to perform expand/collapse animation
+        private QuickClickChecker checker;
 
         private static final int IDLE = 0;
         private static final int RIPPLING = 1;
@@ -776,6 +791,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         public MaskView(Context context, AllAngleExpandableButton button) {
             super(context);
             allAngleExpandableButton = button;
+
+            checker = new QuickClickChecker(allAngleExpandableButton.checkThreshold);
 
             paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
@@ -827,6 +844,9 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             allAngleExpandableButton.pressPointF.set(event.getX(), event.getY());
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    if (checker.isQuick()) {
+                        return false;
+                    }
                     clickIndex = getTouchedButtonIndex();
                     if (allAngleExpandableButton.expanded) {
                         allAngleExpandableButton.updatePressState(clickIndex, true);
