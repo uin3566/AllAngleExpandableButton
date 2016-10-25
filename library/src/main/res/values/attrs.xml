@@ -20,6 +20,7 @@
         <attr name="aebMainButtonRotateDegree" format="integer|reference"/>
         <attr name="aebMainButtonRotateAnimDurationMillis" format="integer|reference"/>
         <attr name="aebBlurBackground" format="boolean" />
+        <attr name="aebBlurRadius" format="float|reference"/>
     </declare-styleable>
 
 </resources>

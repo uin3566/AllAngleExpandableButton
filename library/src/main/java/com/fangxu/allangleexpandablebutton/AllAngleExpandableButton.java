@@ -64,6 +64,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private static final int DEFAULT_END_ANGLE = 90;
     private static final int DEFAULT_BUTTON_TEXT_COLOR = Color.BLACK;
     private static final int DEFAULT_MASK_BACKGROUND_COLOR = Color.TRANSPARENT;
+    private static final int DEFAULT_BLUR_RADIUS = 10;
 
     private boolean expanded = false;
 
@@ -86,6 +87,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private boolean rippleEffect;
     private int rippleColor = Integer.MIN_VALUE;
     private boolean blurBackground;
+    private float blurRadius;
 
     private Bitmap mainShadowBitmap = null;
     private Bitmap subShadowBitmap = null;
@@ -172,6 +174,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         rippleEffect = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebRippleEffect, true);
         rippleColor = ta.getColor(R.styleable.AllAngleExpandableButton_aebRippleColor, rippleColor);
         blurBackground = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebBlurBackground, false);
+        blurRadius = ta.getFloat(R.styleable.AllAngleExpandableButton_aebBlurRadius, DEFAULT_BLUR_RADIUS);
         ta.recycle();
 
         if (mainButtonRotateDegree != 0) {
@@ -501,7 +504,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             ViewGroup root = (ViewGroup)getRootView();
             root.setDrawingCacheEnabled(true);
             Bitmap bitmap = root.getDrawingCache();
-            Bitmap blurBitmap = Blur.getBlurBitmap(getContext(), bitmap, 10);
+            checkBlurRadius();
+            Bitmap blurBitmap = Blur.getBlurBitmap(getContext(), bitmap, blurRadius);
             blurImageView.setImageBitmap(blurBitmap);
             root.setDrawingCacheEnabled(false);
             root.addView(blurImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -514,6 +518,12 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
 
         blurAnimator.start();
+    }
+
+    private void checkBlurRadius() {
+        if (blurRadius <= 0 || blurRadius > 25) {
+            blurRadius = DEFAULT_BLUR_RADIUS;
+        }
     }
 
     private void hideBlur() {
