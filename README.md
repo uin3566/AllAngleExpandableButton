@@ -20,7 +20,7 @@ It support two type of button, text button and icon button.You can define the bu
 * step2:Add the dependency:
 ```
     dependencies {
-        compile 'com.github.uin3566:AllAngleExpandableButton:v1.0.0'
+        compile 'com.github.uin3566:AllAngleExpandableButton:v1.1.0'
     }
 ```
 
