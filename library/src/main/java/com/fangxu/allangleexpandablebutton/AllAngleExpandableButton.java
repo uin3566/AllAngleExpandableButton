@@ -92,9 +92,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     Matrix shadowMatrix;
 
     private int buttonSideMarginPx;
-    private RectF buttonOval;
-    private int width;
-    private int height;
 
     private Paint paint;
     private Paint textPaint;
@@ -321,11 +318,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (buttonOval == null || buttonDatas == null || buttonDatas.isEmpty()) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            return;
-        }
-
         //the button size is only decided by mainButtonSizePx and buttonSideMarginPx that you configure in xml
         int desiredWidth = mainButtonSizePx + buttonSideMarginPx * 2;
         int desiredHeight = mainButtonSizePx + buttonSideMarginPx * 2;
@@ -342,8 +334,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        width = w;
-        height = h;
         initButtonInfo();
         invalidate();
     }
@@ -557,7 +547,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     }
 
     private void drawButton(Canvas canvas) {
-        if (buttonOval == null || buttonDatas == null || buttonDatas.isEmpty()) {
+        if (buttonDatas == null || buttonDatas.isEmpty()) {
             return;
         }
 
@@ -718,12 +708,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     }
 
     private void initButtonInfo() {
-        float innerWidth = width - (getPaddingLeft() + getPaddingRight() + buttonSideMarginPx * 2);
-        float innerHeight = height - (getPaddingTop() + getPaddingBottom() + buttonSideMarginPx * 2);
-        float buttonRadius = Math.min(innerWidth / 2, innerHeight / 2);
-        PointF buttonCenter = new PointF(getPaddingLeft() + width / 2, getPaddingTop() + height / 2);
-        buttonOval = new RectF(buttonCenter.x - buttonRadius, buttonCenter.y - buttonRadius
-                , buttonCenter.x + buttonRadius, buttonCenter.y + buttonRadius);
         getGlobalVisibleRect(rawButtonRect);
         rawButtonRectF.set(rawButtonRect.left, rawButtonRect.top, rawButtonRect.right, rawButtonRect.bottom);
     }
