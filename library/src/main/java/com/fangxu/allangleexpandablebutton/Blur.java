@@ -2,6 +2,9 @@ package com.fangxu.allangleexpandablebutton;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.WorkerThread;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
@@ -13,7 +16,52 @@ import android.support.v8.renderscript.ScriptIntrinsicBlur;
 public class Blur {
     private static final float SCALE = 0.4F;
 
-    public static Bitmap getBlurBitmap(Context context, Bitmap inBitmap, float radius) {
+    private float radius;
+
+    private Thread blurThread;
+    private Context context;
+    private Bitmap inBitmap;
+    private Callback callback;
+
+    public Blur() {
+        initThread();
+    }
+
+    private void initThread() {
+        blurThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Bitmap blurred = getBlurBitmap(context, inBitmap, radius);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (callback != null) {
+                            callback.onBlurred(blurred);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void setParams(Callback callback, Context context, Bitmap inBitmap, float radius) {
+        this.callback = callback;
+        this.context = context;
+        this.inBitmap = inBitmap;
+        this.radius = radius;
+    }
+
+    public void execute() {
+        blurThread.run();
+    }
+
+    @WorkerThread
+    private Bitmap getBlurBitmap(Context context, Bitmap inBitmap, float radius) {
+        if (context == null || inBitmap == null) {
+            throw new IllegalArgumentException("have not called setParams() before call execute()");
+        }
+
         int width = Math.round(inBitmap.getWidth() * SCALE);
         int height = Math.round(inBitmap.getHeight() * SCALE);
 
@@ -39,4 +87,7 @@ public class Blur {
         return out;
     }
 
+    public interface Callback {
+        void onBlurred(Bitmap blurredBitmap);
+    }
 }

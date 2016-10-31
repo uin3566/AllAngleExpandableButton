@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 
@@ -109,8 +110,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     private Path ripplePath;
     private RippleInfo rippleInfo;
     private MaskView maskView;
+    private Blur blur;
     private ImageView blurImageView;
     private ObjectAnimator blurAnimator;
+    private Animator.AnimatorListener blurListener;
     private PointF pressPointF;
     private Rect rawButtonRect;//act as the param of getGlobalVisibleRect(Rect rect) method
     private RectF rawButtonRectF;
@@ -171,6 +174,10 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         blurBackground = ta.getBoolean(R.styleable.AllAngleExpandableButton_aebBlurBackground, false);
         blurRadius = ta.getFloat(R.styleable.AllAngleExpandableButton_aebBlurRadius, DEFAULT_BLUR_RADIUS);
         ta.recycle();
+
+        if (blurBackground) {
+            blur = new Blur();
+        }
 
         if (mainButtonRotateDegree != 0) {
             checkThreshold = expandAnimDuration > rotateAnimDuration ? expandAnimDuration : rotateAnimDuration;
@@ -467,9 +474,8 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             maskView = new MaskView(getContext(), this);
         }
 
-        if (!maskAttached) {
+        if (!maskAttached && !showBlur()) {
             ViewGroup root = (ViewGroup) getRootView();
-            showBlur();
             root.addView(maskView);
             maskAttached = true;
             maskView.reset();
@@ -478,34 +484,44 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
     }
 
-    private void showBlur() {
+    private boolean showBlur() {
         if (!blurBackground) {
-            return;
+            return false;
         }
 
-        //set invisible to avoid be blurred and show the blurred edge when expanded,
+        //set invisible to avoid be blurred that resulting in show the blurred button edge when expanded,
         //must be called before do blur
         setVisibility(INVISIBLE);
 
-        if (blurImageView == null) {
-            blurImageView = new ImageView(getContext());
-            ViewGroup root = (ViewGroup)getRootView();
-            root.setDrawingCacheEnabled(true);
-            Bitmap bitmap = root.getDrawingCache();
-            checkBlurRadius();
-            Bitmap blurBitmap = Blur.getBlurBitmap(getContext(), bitmap, blurRadius);
-            blurImageView.setImageBitmap(blurBitmap);
-            root.setDrawingCacheEnabled(false);
-            root.addView(blurImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        }
+        blurImageView = new ImageView(getContext());
+        final ViewGroup root = (ViewGroup) getRootView();
+        root.setDrawingCacheEnabled(true);
+        Bitmap bitmap = root.getDrawingCache();
+        checkBlurRadius();
 
-        if (blurAnimator == null) {
-            blurAnimator = ObjectAnimator.ofFloat(blurImageView, "alpha", 0, 1).setDuration(expandAnimDuration);
-        } else {
-            blurAnimator.setFloatValues(0, 1);
-        }
+        blur.setParams(new Blur.Callback() {
+            @Override
+            public void onBlurred(Bitmap blurredBitmap) {
+                blurImageView.setImageBitmap(blurredBitmap);
+                root.setDrawingCacheEnabled(false);
+                root.addView(blurImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        blurAnimator.start();
+                blurAnimator = ObjectAnimator.ofFloat(blurImageView, "alpha", 0.0f, 1.0f).setDuration(expandAnimDuration);
+                if (blurListener != null) {
+                    blurAnimator.removeListener(blurListener);
+                }
+                blurAnimator.start();
+
+                root.addView(maskView);
+                maskAttached = true;
+                maskView.reset();
+                maskView.initButtonRect();
+                maskView.onClickMainButton();
+            }
+        }, getContext(), bitmap, blurRadius);
+        blur.execute();
+
+        return true;
     }
 
     private void checkBlurRadius() {
@@ -520,7 +536,21 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         }
 
         setVisibility(VISIBLE);
-        blurAnimator.setFloatValues(1, 0);
+
+        final ViewGroup root = (ViewGroup) getRootView();
+        blurAnimator.setFloatValues(1.0f, 0.0f);
+        if (blurListener == null) {
+            blurListener = new SimpleAnimatorListener() {
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    if (blurImageView != null) {
+                        root.removeView(blurImageView);
+                        blurImageView = null;
+                    }
+                }
+            };
+        }
+        blurAnimator.addListener(blurListener);
         blurAnimator.start();
     }
 
@@ -708,6 +738,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
     }
 
     private void initButtonInfo() {
+        ViewGroup root = (ViewGroup) getRootView();
         getGlobalVisibleRect(rawButtonRect);
         rawButtonRectF.set(rawButtonRect.left, rawButtonRect.top, rawButtonRect.right, rawButtonRect.bottom);
     }
