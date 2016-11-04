@@ -177,6 +177,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
 
         if (blurBackground) {
             blur = new Blur();
+            blurImageView = new ImageView(getContext());
         }
 
         if (mainButtonRotateDegree != 0) {
@@ -493,7 +494,6 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
         //must be called before do blur
         setVisibility(INVISIBLE);
 
-        blurImageView = new ImageView(getContext());
         final ViewGroup root = (ViewGroup) getRootView();
         root.setDrawingCacheEnabled(true);
         Bitmap bitmap = root.getDrawingCache();
@@ -543,10 +543,7 @@ public class AllAngleExpandableButton extends View implements ValueAnimator.Anim
             blurListener = new SimpleAnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    if (blurImageView != null) {
-                        root.removeView(blurImageView);
-                        blurImageView = null;
-                    }
+                    root.removeView(blurImageView);
                 }
             };
         }
